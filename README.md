@@ -135,4 +135,20 @@ Still, the type is string.
 Weak typing → JS will automatically convert types in operations if needed.**
 
   *****************************************************************************
+
+  **falsy / truthy**
+
+  <img width="724" height="772" alt="image" src="https://github.com/user-attachments/assets/05d387a5-a672-4cdb-9f43-11497927a9f0" />
+
+
+  *************************************************************************
+ ** Equlaity operaotr**
+ | Operator | Name              | Type Coercion | Meaning                               | Example     | Result  |
+  | -------- | ----------------- | ------------- | ------------------------------------- | ----------- | ------- |
+  | `==`     | Loose equality    | ✅ Yes         | Compares values after type conversion | `2 == "2"`  | `true`  |
+  | `===`    | Strict equality   | ❌ No          | Compares **value and type**           | `2 === "2"` | `false` |
+  | `!=`     | Loose inequality  | ✅ Yes         | True if values differ after coercion  | `2 != "3"`  | `true`  |
+  | `!==`    | Strict inequality | ❌ No          | True if **value or type** differ      | `2 !== "2"` | `true`  |
+
+  
   
