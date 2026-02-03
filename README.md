@@ -150,5 +150,86 @@ Weak typing → JS will automatically convert types in operations if needed.**
   | `!=`     | Loose inequality  | ✅ Yes         | True if values differ after coercion  | `2 != "3"`  | `true`  |
   | `!==`    | Strict inequality | ❌ No          | True if **value or type** differ      | `2 !== "2"` | `true`  |
 
-  
+  **************************************************
+  const PLAYER_ATTACK_VALUE = 10;
+const PLAYER_STRONG_ATTACK_VALUE = 17;
+const MONSTER_ATTACK_VALUE = 14;
+const HEALVALUE= 20;
+const maxUserLife = 100;
+
+const MODE_ATTACK ="ATTACK";
+const MODE_STRONG_ATTACK ="STRONG ATTACK";
+
+let monsterLife =maxUserLife;
+let playerLife = maxUserLife;
+let bonusHelath =true;
+
+adjustHealthBars(maxUserLife);
+
+function attackMonster(mode){
+        let maxDamage;
+        if(mode===MODE_ATTACK){
+            maxDamage= PLAYER_ATTACK_VALUE;
+        }else if (mode===MODE_STRONG_ATTACK){
+            maxDamage= PLAYER_STRONG_ATTACK_VALUE;
+        }
+        const damage = dealMonsterDamage(maxDamage);
+        monsterLife-=damage;
+        endRound();
+}
+
+function endRound(){
+        const intialPlayerHealth = playerLife;
+        const playerDamage = dealPlayerDamage(MONSTER_ATTACK_VALUE);
+        playerLife-=playerDamage;
+
+        if(playerLife<=0 && bonusHelath){
+            bonusHelath=false;
+            removeBonusLife();
+            playerLife = intialPlayerHealth;
+            setPlayerHealth(intialPlayerHealth);
+            alert("Bonus life saved you !");
+        }
+        if(monsterLife <= 0 && playerLife > 0){
+            alert("You Won !");
+        }else if(monsterLife > 0 &&  playerLife <= 0){
+             alert("You Lost !");
+        }else if(monsterLife <= 0 &&  playerLife <= 0){
+            alert("Match draw !")
+        }
+        if(monsterLife <=0 || playerLife <=0){
+                reset();
+        }
+}
+
+
+function reset(){
+    monsterLife =maxUserLife;
+    playerLife = maxUserLife;
+    resetGame(maxUserLife);
+}
+
+function attackHandler(){
+        attackMonster(MODE_ATTACK);
+}
+function strongAttackHandler(){
+        attackMonster(MODE_STRONG_ATTACK);
+}
+
+function healHandler(){
+    let healValue;
+    if(playerLife >= maxUserLife - HEALVALUE){
+        alert("You have enough power !");
+        healValue = maxUserLife - playerLife;
+    }else{
+        healValue = HEALVALUE;
+    }
+    increasePlayerHealth(healValue);
+    playerLife+=healValue;
+
+}
+
+attackBtn.addEventListener('click',attackHandler);
+strongAttackBtn.addEventListener('click',strongAttackHandler)
+healBtn.addEventListener('click',healHandler);
   
