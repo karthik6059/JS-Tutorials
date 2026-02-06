@@ -194,3 +194,39 @@ const userName = enteredValue || 'PLACEHOLDER'; // will assign 'PLACEHOLDER' if 
 
    **************************************************
 
+  ** Cdde compilation**
+
+   +-----------------+
+|   JS Code (Text) |
++-----------------+
+          |
+          v
++-----------------+
+|     Parsing     |  ← Converts code into AST (Abstract Syntax Tree)
++-----------------+
+          |
+          v
++-----------------+
+|  Interpreter    |  ← Ignition reads AST → converts to bytecode
+|  Executes bytecode line by line
+|  Detects runtime errors
++-----------------+
+          |
+          v
+   Hot Code Detected?  ---> No --> Continue interpreting
+          |
+         Yes
+          |
+          v
++-----------------+
+|   JIT Compiler  |  ← TurboFan compiles hot bytecode → Optimized Machine Code
+|  Applies optimizations (inlining, type predictions, etc.)
++-----------------+
+          |
+          v
++-----------------+
+| Optimized Machine|
+|      Code       |  ← Runs directly on CPU (super fast)
++-----------------+
+
+  **************************************************
