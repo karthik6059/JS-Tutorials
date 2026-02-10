@@ -347,4 +347,56 @@ Arrow function = (params) => expression for short, or (params) => { statements; 
 | **IIFE (Immediately Invoked)**   | ❌ Rarely used directly               | ✅ Common (anonymous or arrow)                                           |
 
 
+
+
+1️⃣ Default arguments
+
+Fallback values when args are missing.
+
+function greet(name = "Guest") {
+  return `Hello, ${name}`;
+}
+
+greet();        // Hello, Guest
+greet("Sam");   // Hello, Sam
+
+2️⃣ Rest operator (...)
+
+Collects arguments into an array.
+
+function sum(...nums) {
+  return nums.reduce((a, b) => a + b, 0);
+}
+
+sum(1, 2, 3); // 6
+
+3️⃣ bind()
+
+Returns a new function with fixed this.
+
+const user = { name: "Alex" };
+
+function hi() {
+  return `Hi ${this.name}`;
+}
+
+const boundHi = hi.bind(user);
+boundHi(); // Hi Alex
+
+4️⃣ call()
+
+Invokes function immediately, arguments passed one by one.
+
+hi.call(user); // Hi Alex
+
+5️⃣ apply()
+
+Same as call, but arguments passed as an array.
+
+function intro(age, city) {
+  return `${this.name}, ${age}, ${city}`;
+}
+
+intro.apply(user, [25, "NY"]); // Alex, 25, NY
+
 *********************************************************
