@@ -230,3 +230,121 @@ const userName = enteredValue || 'PLACEHOLDER'; // will assign 'PLACEHOLDER' if 
 +-----------------+
 
   **************************************************
+
+ ** ARROW FUNCTION
+**
+ ** 1. Basic Syntax**
+Single parameter
+const greet = name => `Hello, ${name}!`; // implicit return
+
+Multiple parameters
+const add = (a, b) => a + b; // implicit return
+
+No parameters
+const sayHi = () => "Hi!"; // implicit return
+
+**2. Function body options**
+a) Single expression → implicit return
+const square = x => x * x; // returns x*x automatically
+
+
+No {} needed
+
+return is not required
+
+b) Block body → explicit return
+const square = x => {
+  console.log("Calculating...");
+  return x * x; // must use return here
+};
+
+
+{} creates a block body
+
+return required if you want a value returned
+
+Can have multiple statements
+
+c) Returning an object literal
+const createPoint = (x, y) => ({ x, y }); // implicit return using parentheses
+
+
+Parentheses around {} are needed for implicit return of objects
+
+Otherwise {} is interpreted as a block
+
+**3. Rules / General Guidelines**
+
+Parentheses around parameters
+
+Single parameter → parentheses optional
+
+x => x * x
+
+
+Zero or multiple parameters → parentheses required
+
+() => 42
+(x, y) => x + y
+
+
+Return keyword
+
+Omit return if the body is a single expression without {}
+
+Use return if the body has {} (block) and you want to return a value
+
+this binding
+
+Arrow functions do not have their own this
+
+They inherit this from the enclosing context
+
+const obj = {
+  value: 10,
+  show: () => console.log(this.value) // 'this' is inherited; may not behave as expected
+};
+
+
+Cannot be used as constructors
+
+Arrow functions cannot be used with new
+
+**4. Examples**
+// Implicit return
+const multiply = (a, b) => a * b;
+
+// Block body with explicit return
+const multiplyVerbose = (a, b) => {
+  const result = a * b;
+  return result;
+};
+
+// Returning object
+const makeUser = (name, age) => ({ name, age });
+
+// No parameters
+const getRandom = () => Math.random();
+
+
+✅ Summary in One Line:
+
+Arrow function = (params) => expression for short, or (params) => { statements; return value; } for blocks.
+
+
+| Feature / Property               | Function Declaration                 | Function Expression (Anonymous / Arrow)                                 |
+| -------------------------------- | ------------------------------------ | ----------------------------------------------------------------------- |
+| **Syntax**                       | `function name(params) { ... }`      | `const fn = function(params) { ... }` <br> `const fn = (params) => ...` |
+| **Hoisting**                     | ✅ Entire function is hoisted         | ❌ Only variable name hoisted (`const/let` in TDZ)                       |
+| **Call before definition**       | ✅ Works                              | ❌ ReferenceError if `const/let`                                         |
+| **Name**                         | Always named                         | Can be anonymous or named                                               |
+| **Return**                       | `return` required in block           | `return` optional if using single-expression arrow function             |
+| **`this` binding**               | Dynamic (`this` depends on caller)   | Arrow: lexical (`this` inherited) <br> Anonymous: dynamic               |
+| **`arguments` object**           | ✅ Available                          | Arrow: ❌ Not available <br> Anonymous: ✅ Available                      |
+| **Use as constructor (`new`)**   | ✅ Yes                                | Arrow: ❌ No <br> Anonymous: ✅ Yes                                       |
+| **Stored as object**             | ✅ Function object stored in memory   | ✅ Function object stored in variable                                    |
+| **Use as expression / callback** | ✅ Can be used (but usually assigned) | ✅ Works naturally (assigned or IIFE)                                    |
+| **IIFE (Immediately Invoked)**   | ❌ Rarely used directly               | ✅ Common (anonymous or arrow)                                           |
+
+
+*********************************************************
