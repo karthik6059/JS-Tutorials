@@ -26,6 +26,7 @@ Failure & Edge Cases	System stability	DB down, Email server down, Network interr
 Regression Areas	Re-validation after changes	Login flow, Lock logic, Timeout, Encryption, CAPTCHA, Remember Me, Browser compatibility
 Automation Readiness	Suitable for automation	Login validation, Boundary tests, Lockout logic, Session timeout, API response checks
 
+*********************************************************
  
 Exercise 2: Design complete test cases for 'User Registration' considering functional, negative,boundary, security, integration, and performance aspects.Guidance: - Identify inputs and rules - Apply boundary conditions - Consider failure scenarios -Think about integration impact - Include regression areas - Consider automation readiness
 Solution:
@@ -78,8 +79,47 @@ Regression	Admin User Management	Admin sees/edits new users correctly
 	Role & Permissions	Default role assignment validated
 	Reports / Analytics	User metrics accurate
 
+*********************************************************
  
+Exercise 3: Design complete test cases for 'Password Reset with OTP' considering functional,negative, boundary, security, integration, and performance aspects.Guidance: - Identify inputs and rules - Apply boundary conditions - Consider failure scenarios -Think about integration impact - Include regression areas - Consider automation readiness
+Solution:
+1. Inputs and Rules Identification
+Inputs:
+•	Registered email / mobile number
+•	OTP (One-Time Password)
+•	New password
+•	Confirm password
+Rules / Business Logic:
+1.	OTP is valid for a limited time (e.g., 5 minutes).
+2.	OTP is a fixed length (typically 6 digits).
+3.	Password must meet complexity rules (e.g., min 8 characters, 1 uppercase, 1 number, 1 special character).
+4.	Email/mobile must be registered.
+5.	Password and confirm password must match.
+6.	User cannot reuse last N passwords.
+7.	OTP attempts limit (e.g., 3 attempts per request).
+ID	Test Scenario	Category	Description / Key Points
+TS01	Request OTP	Functional	User requests OTP for registered email/phone; verify OTP sent successfully
+TS02	Enter correct OTP	Functional	User enters valid OTP within expiry; should proceed to reset password
+TS03	Enter incorrect OTP	Negative	Invalid OTP entry; system should display error
+TS04	OTP expiry	Boundary / Negative	OTP used after expiry; system rejects OTP
+TS05	OTP resend	Functional / Boundary	Resend OTP; old OTP invalidated; verify resend limits
+TS06	Password reset with valid password	Functional	New password meets complexity; reset successful
+TS07	Password and confirm mismatch	Negative	System should show error for mismatch
+TS08	Weak password entry	Negative / Boundary	Password not meeting rules; system rejects
+TS09	Minimum password length	Boundary	Password at minimum length accepted
+TS10	Maximum password length	Boundary	Password at max allowed length accepted
+TS11	Reuse old password	Negative / Security	System prevents reuse of previous password
+TS12	Request OTP for unregistered user	Negative	Error displayed; OTP not sent
+TS13	Maximum OTP attempts exceeded	Security	System blocks OTP after allowed attempts
+TS14	SQL Injection / XSS attacks	Security	Input fields are sanitized; no DB compromise
+TS15	OTP transmission via email/SMS	Integration	Verify OTP delivery via email/SMS gateway
+TS16	Password change reflects in login	Integration	User can login with new password; DB updated correctly
+TS17	High concurrent OTP requests	Performance	System handles peak load without errors
+TS18	OTP verification under load	Performance	System validates OTPs correctly under load
+TS19	Session / link security	Security / Integration	Password reset link valid only for authorized user/session
+TS20	Regression scenarios	Regression	Ensure existing OTP and password rules still work after changes
 
+*********************************************************
 
 
 
