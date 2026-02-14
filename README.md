@@ -530,10 +530,28 @@ Works with for...of	✅	❌ (not always)
 | -------------- | ------------------------------------ | ----------------------------------- |
 | `[1,2,3]`      | Direct array                         | ✅ Best & simplest                   |
 | `Array()`      | Empty array                          | Rarely needed                       |
-| `Array(5)`     | Empty slots with length 5            | ⚠️ Be careful                       |
+| `Array(5)`     | Empty slots with length 5 if only one value passed           | ⚠️ Be careful                       |
 | `Array.of()`   | Exact values into array              | When avoiding constructor confusion |
 | `Array.from()` | Convert iterable/array-like to array | Very useful                         |
 
+**Rules for array.from()**
+| Object Type          | Numeric indices + length | Iterable | Can use Array.from? |
+| -------------------- | ------------------------ | -------- | ------------------- |
+| Normal object        | ❌                        | ❌        | ❌                   |
+| Custom array-like    | ✅                        | ❌        | ✅                   |
+| Array / String / Set | ✅ / ✅ / ❌                | ✅        | ✅                   |
+
+not working vs working
+
+const ob = {0:"karthik",1:25};
+const d = Array.from(ob);
+console.log(d);
+
+vs 
+
+const ob = {0: "karthik", 1: 25, length: 2};
+const d = Array.from(ob);
+console.log(d); 
 
 
 
