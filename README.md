@@ -524,6 +524,20 @@ Works with for...of	✅	❌ (not always)
   objects                        | ✅         | ❌          |
 | Custom `{0:..., length:...}` | ❌          | ✅          |
 
+****Array feature**:
+
+| Feature                     | JavaScript Array                                                                                              |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| **Size**                    | **Dynamic** – You can add/remove elements anytime, no need to define size upfront.                            |
+| **Data type**               | **Heterogeneous** – Can store numbers, strings, objects, other arrays, functions, etc. all in the same array. |
+| **Access by index**         | ✅ Use numeric indices: `arr[0], arr[1]…`                                                                      |
+| **Length property**         | ✅ `arr.length` automatically updates as you push/pop or assign at higher index.                               |
+| **Methods to add/remove**   | `push()`, `pop()`, `shift()`, `unshift()`, `splice()`                                                         |
+| **Can assign at any index** | ✅ e.g., `arr[5] = "new"` automatically increases length, creates empty slots.                                 |
+| **Iterable**                | ✅ Can use `for...of`, spread operator `[...]`, `Array.from()` (if array-like/iterable).                       |
+| **Array-like objects**      | ❌ Normal objects aren’t arrays; must have numeric indices + length to convert via `Array.from()`.             |
+| **Multi-type storage**      | ✅ Example: `[1, "hello", true, {a:1}, [2,3]]`                                                                 |
+
 
   Array creatiion sysntax:
   | Method         | What it does                         | When to use                         |
@@ -540,6 +554,8 @@ Works with for...of	✅	❌ (not always)
 | Normal object        | ❌                        | ❌        | ❌                   |
 | Custom array-like    | ✅                        | ❌        | ✅                   |
 | Array / String / Set | ✅ / ✅ / ❌                | ✅        | ✅                   |
+
+
 
 not working vs working
 
