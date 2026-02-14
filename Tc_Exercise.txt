@@ -120,6 +120,154 @@ TS19	Session / link security	Security / Integration	Password reset link valid on
 TS20	Regression scenarios	Regression	Ensure existing OTP and password rules still work after changes
 
 *********************************************************
+Exercise 4: Design complete test cases for 'E-commerce Product Search' considering functional, negative, boundary, security, integration, and performance aspects. Guidance: - Identify inputs and rules - Apply boundary conditions - Consider failure scenarios - Think about integration impact - Include regression areas - Consider automation readiness
+
+Identify Inputs & Business Rules
+🔹 Inputs
+
+Search keyword (text field)
+
+Filters (category, price range, rating, brand, availability)
+
+Sort options (price low-high, popularity, newest, rating)
+
+Pagination (page number, page size)
+
+Auto-suggest input (incremental typing)
+
+🔹 Business Rules (Sample Assumptions)
+
+Minimum keyword length = 1 character
+
+Maximum keyword length = 255 characters
+
+Price range: 0 – 1,000,000
+
+Page size options: 10, 20, 50
+
+Out-of-stock items shown based on toggle
+
+Search results must match keyword (name, description, tags)
+
+| Category        | Scenario ID | Scenario Description                       | Expected Outcome                         |
+| --------------- | ----------- | ------------------------------------------ | ---------------------------------------- |
+| **Functional**  | F01         | Search with valid keyword                  | Relevant products displayed              |
+|                 | F02         | Search with filters (brand, price, rating) | Results match applied filters            |
+|                 | F03         | Apply sorting options                      | Results sorted correctly                 |
+|                 | F04         | Pagination navigation                      | Correct page results displayed           |
+|                 | F05         | Auto-suggestion feature                    | Suggestions shown dynamically            |
+|                 | F06         | No results found                           | Proper “No products found” message       |
+| **Negative**    | N01         | Empty search input                         | Validation or default behavior triggered |
+|                 | N02         | Invalid characters / special characters    | Handled gracefully without crash         |
+|                 | N03         | Invalid filter values                      | Validation message shown                 |
+|                 | N04         | Invalid page number                        | Error handled properly                   |
+| **Boundary**    | B01         | Minimum keyword length (1 char)            | Accepted                                 |
+|                 | B02         | Maximum keyword length (255 chars)         | Accepted                                 |
+|                 | B03         | Price range boundaries (0, max limit)      | Valid results returned                   |
+|                 | B04         | Maximum page size                          | Results load correctly                   |
+| **Security**    | S01         | SQL Injection attempt                      | No DB exposure / error                   |
+|                 | S02         | XSS script injection                       | Script not executed                      |
+|                 | S03         | URL parameter tampering                    | Request rejected or sanitized            |
+|                 | S04         | Rate limit check                           | System throttles excessive calls         |
+| **Integration** | I01         | Product DB update reflection               | Updated data visible in search           |
+|                 | I02         | Inventory sync                             | Stock status accurate                    |
+|                 | I03         | Pricing service integration                | Correct price displayed                  |
+|                 | I04         | Search index consistency                   | Accurate and consistent results          |
+| **Performance** | P01         | Normal load response time                  | < 2 seconds                              |
+|                 | P02         | Concurrent users (1000+)                   | System stable                            |
+|                 | P03         | Large dataset search                       | No timeout                               |
+|                 | P04         | Auto-suggest latency                       | < 500ms                                  |
+| **Regression**  | R01         | After search algorithm update              | No break in filters/sorting              |
+|                 | R02         | UI changes impact                          | Search works across devices              |
+|                 | R03         | API contract validation                    | No breaking changes                      |
+
+***********************************************************************************************************************
+
+Exercise 5: Design complete test cases for 'Add to Cart' considering functional, negative, boundary,
+security, integration, and performance aspects.
+Guidance: - Identify inputs and rules - Apply boundary conditions - Consider failure scenarios -
+Think about integration impact - Include regression areas - Consider automation readiness
+
+✅ 1. Identify Inputs & Business Rules
+Inputs
+
+Product ID (SKU)
+
+Quantity
+
+Product options (size, color, variant)
+
+User type (Guest / Logged-in)
+
+Stock availability
+
+Price (base price, discount, tax)
+
+Promo code (if auto-applied)
+
+Cart session ID
+
+Core Rules (Typical E-commerce)
+
+Quantity must be ≥ 1
+
+Quantity ≤ available stock
+
+Some products have max purchase limit (e.g., 5 per customer)
+
+Price must match backend price (not client-side)
+
+Cart must persist (session/user-based)
+
+Adding same product twice updates quantity (or creates separate line based on rules)
+
+| Category             | Scenario                     | Expected Outcome                              |
+| -------------------- | ---------------------------- | --------------------------------------------- |
+| **Functional**       | Add single product           | Item added, cart count updated                |
+|                      | Add multiple quantity        | Correct quantity reflected                    |
+|                      | Add same product twice       | Quantity updated or separate line as per rule |
+|                      | Add different variants       | Variants added separately                     |
+|                      | Add as guest user            | Session cart created                          |
+|                      | Add as logged-in user        | Cart linked to account                        |
+|                      | Add in-stock product         | Successfully added                            |
+|                      | Auto-apply discount          | Discount reflected correctly                  |
+| **Negative**         | Quantity = 0                 | Validation error                              |
+|                      | Negative quantity            | Validation error                              |
+|                      | Alphabetic quantity          | Input rejected                                |
+|                      | Decimal quantity             | Validation error                              |
+|                      | Extremely large quantity     | Error or stock validation triggered           |
+|                      | Invalid product ID           | Proper error message                          |
+|                      | Expired session              | Redirect/login or new session created         |
+|                      | Price tampering via DevTools | Backend recalculates correct price            |
+| **Boundary**         | Minimum quantity (1)         | Success                                       |
+|                      | Maximum allowed quantity     | Success                                       |
+|                      | Max + 1 quantity             | Validation error                              |
+|                      | Exact stock quantity         | Success                                       |
+|                      | Stock + 1                    | Error message                                 |
+| **Security**         | SQL injection attempt        | Input sanitized                               |
+|                      | XSS attempt                  | Script not executed                           |
+|                      | Unauthorized API call        | 401/403 error                                 |
+|                      | CSRF attempt                 | Request blocked                               |
+|                      | Rate limit abuse             | Throttling applied                            |
+| **Integration**      | Inventory service validation | Stock validated correctly                     |
+|                      | Pricing service integration  | Correct price fetched                         |
+|                      | Promotion engine             | Discount applied accurately                   |
+|                      | Tax calculation              | Correct tax applied                           |
+|                      | Analytics tracking           | Add-to-cart event recorded                    |
+| **Performance**      | Normal load                  | Response < 2 sec                              |
+|                      | High concurrency             | No failures                                   |
+|                      | Large cart (100 items)       | Acceptable performance                        |
+|                      | Repeated add/remove          | No memory leaks                               |
+| **Regression**       | Checkout flow                | No impact                                     |
+|                      | Cart update/remove           | Works correctly                               |
+|                      | Coupon logic                 | Still functions properly                      |
+|                      | Guest-to-user cart merge     | Data retained correctly                       |
+| **Failure Handling** | Inventory service down       | Proper error shown                            |
+|                      | Pricing service timeout      | Graceful handling                             |
+|                      | DB failure                   | No inconsistent cart state                    |
+|                      | Network interruption         | No duplicate entries                          |
+
+************************************************************************************************************************************************
 
 
 
