@@ -1,0 +1,86 @@
+Exercise 1: Design complete test cases for 'Login System' considering functional, negative, boundary, security, integration, and performance aspects. Guidance: - Identify inputs and rules - Apply boundary conditions - Consider failure scenarios - Think about integration impact - Include regression areas - Consider automation readiness
+Solution:
+1️⃣ Assumptions & Input Rules
+Input Fields:
+•	Username / Email
+•	Password
+•	Remember Me (checkbox)
+•	Login Button
+•	Forgot Password link
+•	CAPTCHA (after N failed attempts)
+Business Rules:
+•	Username: 3–50 characters (alphanumeric + allowed special chars)
+•	Password: 8–20 characters
+•	Account locks after 5 failed attempts
+•	Session timeout: 15 minutes of inactivity
+•	Password stored encrypted
+•	HTTPS enforced
+Test Type	Coverage Area	Key Scenarios Covered
+Functional Testing	Core system behavior	Valid login, email login, Remember Me, Forgot password, Logout, Session timeout, CAPTCHA trigger
+Negative Testing	Invalid inputs & error handling	Empty fields, wrong password, unregistered user, locked account, expired password
+Boundary Testing	Input limits validation	Username (3–50 chars), Password (8–20 chars), Login attempt threshold (5 attempts)
+Security Testing	Protection against vulnerabilities	SQL injection, XSS, brute force, HTTPS enforcement, session fixation, CSRF, token tampering, password hashing
+Integration Testing	External system interaction	Database validation, Email service, LDAP/SSO, CAPTCHA service, Audit logging
+Performance Testing	Load & stress behavior	1,000 concurrent users, 5,000 peak load, API stress test, DB performance
+Failure & Edge Cases	System stability	DB down, Email server down, Network interruption, Expired session, Multiple device login
+Regression Areas	Re-validation after changes	Login flow, Lock logic, Timeout, Encryption, CAPTCHA, Remember Me, Browser compatibility
+Automation Readiness	Suitable for automation	Login validation, Boundary tests, Lockout logic, Session timeout, API response checks
+
+ 
+Exercise 2: Design complete test cases for 'User Registration' considering functional, negative,boundary, security, integration, and performance aspects.Guidance: - Identify inputs and rules - Apply boundary conditions - Consider failure scenarios -Think about integration impact - Include regression areas - Consider automation readiness
+Solution:
+1️⃣ Assumptions & Business Rules
+Fields
+•	First Name (Required, 2–50 chars, alphabets + hyphen allowed)
+•	Last Name (Required, 2–50 chars)
+•	Email (Required, valid format, unique)
+•	Password (Required, 8–20 chars)
+•	Confirm Password (Must match)
+•	Phone (Optional, 10–15 digits)
+•	Date of Birth (Optional, age ≥ 13)
+•	Accept Terms (Mandatory checkbox)
+Password Rules
+•	At least 1 uppercase
+•	At least 1 lowercase
+•	At least 1 number
+•	At least 1 special character
+Category	Test Scenario	Description / Key Points
+Functional	Successful Registration	All mandatory fields valid → account created
+	Mandatory Field Validation	Leave required fields blank → error shown
+	Email Format Validation	Invalid email → error shown
+	Password Complexity	Password missing criteria → blocked
+	Confirm Password Mismatch	Password ≠ Confirm Password → error
+	Unique Email Check	Duplicate email → error
+	Terms Not Accepted	Registration blocked if checkbox unchecked
+	Optional Fields Blank	Registration still successful
+Boundary	Field Length Validation	First/Last Name, Password, etc., min & max limits
+	Age Limit	DOB validation (≥13 years)
+Negative	Blank Submission	All fields blank → errors
+	Invalid Characters	Special chars in name → error
+	Injection Attacks	SQL/XSS → blocked / sanitized
+	Network / Timeout Failures	Proper error handling & rollback
+	Duplicate Submission	Prevent double registration
+	Excessively Long Inputs	Inputs > expected length → rejected
+Security	Password Storage	Stored encrypted (hash + salt)
+	HTTPS Enforcement	Data transmitted securely
+	Brute Force / Rate Limit	Limit repeated attempts
+	CSRF / XSS	Requests blocked / sanitized
+	API Payload Tampering	Server-side validation enforced
+Integration	Email Service	Verification email sent
+	Database	User data stored correctly
+	CRM / Analytics / SSO	Data synced & events logged
+	SMS Gateway	OTP sent (if applicable)
+Performance	Response Time	Single registration < 2s
+	Load / Stress / Spike Test	System handles concurrent registrations
+	Database Load	No deadlocks or failures
+Regression	Admin User Management	Admin sees/edits new users correctly
+	Login / Password Reset	Works for new registered users
+	Role & Permissions	Default role assignment validated
+	Reports / Analytics	User metrics accurate
+
+ 
+
+
+
+
+
