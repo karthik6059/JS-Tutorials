@@ -570,4 +570,91 @@ const d = Array.from(ob);
 console.log(d); 
 
 
+***Array methods****
 
+📦 JavaScript Array Basics
+1️⃣ Core Array Methods
+| Method      | What It Does                 | Changes Original Array? | Returns         | Example          | Result      |
+| ----------- | ---------------------------- | ----------------------- | --------------- | ---------------- | ----------- |
+| `push()`    | Adds element(s) to **end**   | ✅ Yes                   | New length      | `arr.push(4)`    | `[1,2,3,4]` |
+| `pop()`     | Removes last element         | ✅ Yes                   | Removed element | `arr.pop()`      | `[1,2]`     |
+| `shift()`   | Removes first element        | ✅ Yes                   | Removed element | `arr.shift()`    | `[2,3]`     |
+| `unshift()` | Adds element(s) to **start** | ✅ Yes                   | New length      | `arr.unshift(0)` | `[0,1,2,3]` |
+
+| Operation   | Start    | Middle | End      | Affects Length | Shifts Indexes? |
+| ----------- | -------- | ------ | -------- | -------------- | --------------- |
+| `push()`    | ❌        | ❌      | ✅ Add    | ✅ Yes          | ❌ No            |
+| `pop()`     | ❌        | ❌      | ✅ Remove | ✅ Yes          | ❌ No            |
+| `shift()`   | ✅ Remove | ❌      | ❌        | ✅ Yes          | ✅ Yes           |
+| `unshift()` | ✅ Add    | ❌      | ❌        | ✅ Yes          | ✅ Yes           |
+
+
+2️⃣ Indexing Rules
+| Concept         | Description      | Example                  |
+| --------------- | ---------------- | ------------------------ |
+| Index starts at | `0`              | `arr[0]` → first element |
+| Last index      | `length - 1`     | `arr[arr.length - 1]`    |
+| Access element  | `array[index]`   | `arr[2]`                 |
+| Change element  | Assign new value | `arr[1] = 100`           |
+
+
+splice method to remove/ add elements in reuqired portion
+| Feature                                   | Description                                             | Syntax / Example                                    | Notes / Behavior                              |
+| ----------------------------------------- | ------------------------------------------------------- | --------------------------------------------------- | --------------------------------------------- |
+| **Purpose**                               | Remove, add, or replace elements in an array            | `arr.splice(start, deleteCount, item1, item2, ...)` | Modifies the original array                   |
+| **Return Value**                          | Returns array of deleted elements                       | `let removed = arr.splice(2,1)`                     | Returns `[]` if nothing deleted               |
+| **start (positive)**                      | Index to start from                                     | `arr.splice(2,1)`                                   | 0-based indexing                              |
+| **start (negative)**                      | Counts from end                                         | `arr.splice(-1,1)`                                  | `start = arr.length + start`                  |
+| **deleteCount omitted**                   | Deletes all from `start` to end                         | `arr.splice(2)`                                     | Equivalent to `arr.splice(2, arr.length - 2)` |
+| **deleteCount > available elements**      | Deletes only available elements                         | `arr.splice(-1, 5)`                                 | No error thrown                               |
+| **deleteCount = 0**                       | Inserts without deleting                                | `arr.splice(2,0,'x')`                               | Useful for insertion                          |
+| **Insertion**                             | Any additional arguments after deleteCount are inserted | `arr.splice(2,1,'a','b')`                           | Replaces the deleted element(s)               |
+| **Empty array behavior**                  | Works even on empty arrays                              | `[].splice(0,1)` → `[]`                             | Returns empty array, array remains empty      |
+| **Edge case negative start beyond array** | `start < -length` → treated as `0`                      | `arr.splice(-10,1)`                                 | Deletes from beginning                        |
+
+Example:
+| Code                          | Array Before | Result (Deleted) | Array After       |
+| ----------------------------- | ------------ | ---------------- | ----------------- |
+| `[1,2,3,4].splice(1,2)`       | `[1,2,3,4]`  | `[2,3]`          | `[1,4]`           |
+| `[1,2,3,4].splice(-2,1)`      | `[1,2,3,4]`  | `[3]`            | `[1,2,4]`         |
+| `[1,2,3,4].splice(2)`         | `[1,2,3,4]`  | `[3,4]`          | `[1,2]`           |
+| `[1,2,3,4].splice(-10,1)`     | `[1,2,3,4]`  | `[1]`            | `[2,3,4]`         |
+| `[1,2,3].splice(1,0,'a','b')` | `[1,2,3]`    | `[]`             | `[1,'a','b',2,3]` |
+
+
+slice() does not modify the original array — it’s purely for extracting a portion.
+
+🔹 JavaScript slice() Summary Table
+| Feature                    | Description                                    | Syntax / Example           | Notes / Behavior                                    |
+| -------------------------- | ---------------------------------------------- | -------------------------- | --------------------------------------------------- |
+| **Purpose**                | Extract a section of an array into a new array | `arr.slice(start, end)`    | Original array **remains unchanged**                |
+| **Return Value**           | New array containing selected elements         | `let sub = arr.slice(1,3)` | If nothing is selected, returns `[]`                |
+| **start (positive)**       | Index to start from                            | `arr.slice(2)`             | 0-based indexing; inclusive                         |
+| **start (negative)**       | Counts from end                                | `arr.slice(-2)`            | `start = arr.length + start`                        |
+| **end (optional)**         | Index to stop before                           | `arr.slice(1,3)`           | Non-inclusive: element at `end` is **not included** |
+| **end (negative)**         | Counts from end                                | `arr.slice(1,-1)`          | `end = arr.length + end`                            |
+| **end omitted**            | Extracts until end of array                    | `arr.slice(2)`             | Includes last element automatically                 |
+| **start ≥ array length**   | Returns empty array                            | `arr.slice(10)`            | Nothing to extract                                  |
+| **start < 0 beyond array** | Treated as 0                                   | `arr.slice(-10,2)`         | Extracts from beginning up to `end`                 |
+| **Empty array behavior**   | Works on empty arrays                          | `[].slice(0,1)` → `[]`     | Always returns empty array                          |
+| **Immutable**              | Does **not** change the original array         | `arr.slice(1,3)`           | Use `splice()` if you want to modify the array      |
+
+📌 Quick Visual Examples
+| Code                     | Array Before | Result  | Array After |
+| ------------------------ | ------------ | ------- | ----------- |
+| `[1,2,3,4].slice(1,3)`   | `[1,2,3,4]`  | `[2,3]` | `[1,2,3,4]` |
+| `[1,2,3,4].slice(-2)`    | `[1,2,3,4]`  | `[3,4]` | `[1,2,3,4]` |
+| `[1,2,3,4].slice(2)`     | `[1,2,3,4]`  | `[3,4]` | `[1,2,3,4]` |
+| `[1,2,3,4].slice(-3,-1)` | `[1,2,3,4]`  | `[2,3]` | `[1,2,3,4]` |
+| `[1,2,3].slice(5)`       | `[1,2,3]`    | `[]`    | `[1,2,3]`   |
+
+💡 Key Differences vs splice()
+| Feature                  | `slice()` | `splice()`                              |
+| ------------------------ | --------- | --------------------------------------- |
+| Modifies original array? | ❌ No      | ✅ Yes                                   |
+| Returns                  | New array | Deleted elements                        |
+| Can insert elements?     | ❌ No      | ✅ Yes                                   |
+| Handles negative indices | ✅ Yes     | ✅ Yes                                   |
+| Default delete behavior  | ❌ N/A     | Deletes to end if `deleteCount` omitted |
+
+******************************************
