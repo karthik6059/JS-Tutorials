@@ -658,3 +658,85 @@ slice() does not modify the original array — it’s purely for extracting a po
 | Default delete behavior  | ❌ N/A     | Deletes to end if `deleteCount` omitted |
 
 ******************************************
+**JS Array concat method**
+
+.concat() alwaysreturn new array
+
+| Feature                     | Description                                       |
+| --------------------------- | ------------------------------------------------- |
+| **Method Name**             | `concat()`                                        |
+| **Purpose**                 | Merges two or more arrays                         |
+| **Returns**                 | A **new array** (does not modify original arrays) |
+| **Syntax**                  | `array1.concat(array2, array3, ..., arrayN)`      |
+| **Parameters**              | Arrays and/or values to concatenate               |
+| **Changes Original Array?** | ❌ No (non-mutating method)                        |
+
+| Code                    | Output        | Explanation                 |
+| ----------------------- | ------------- | --------------------------- |
+| `[1,2].concat([3,4])`   | `[1,2,3,4]`   | Merges two arrays           |
+| `[1].concat([2],[3])`   | `[1,2,3]`     | Merges multiple arrays      |
+| `[1,2].concat(3,4)`     | `[1,2,3,4]`   | Adds values to array        |
+| `[1,2].concat([3,[4]])` | `[1,2,3,[4]]` | Does **not** flatten deeply |
+
+**********************************
+Array.indexOf() method
+
+| Feature                      | Description                                                                |
+| ---------------------------- | -------------------------------------------------------------------------- |
+| **Method Name**              | `indexOf()`                                                                |
+| **Purpose**                  | Returns the first index at which a given element exists in an array        |
+| **Return Value**             | Index (number) if found, otherwise `-1`                                    |
+| **Case Sensitive?**          | Yes (for strings)                                                          |
+| **Search Direction**         | Left → Right                                                               |
+| **Modifies Original Array?** | ❌ No                                                                       |
+| **Syntax**                   | `array.indexOf(searchElement, fromIndex)`                                  |
+| **Parameters**               | `searchElement` – value to find<br>`fromIndex` (optional) – start position |
+| **Works With**               | Primitive values (number, string, boolean)                                 |
+| **Object Comparison**        | Compares by reference, not by value                                        |
+
+**Note**
+No — indexOf() does NOT perform type coercion.
+
+It uses strict equality (===) for comparison.
+
+🔎 Example 1: Number vs String
+let arr = [1, 2, 3];
+
+console.log(arr.indexOf("1")); // -1 ❌
+console.log(arr.indexOf(1));   // 0 ✅
+
+***********************************************
+find() vs findIndex() Summary
+Method	What It Returns	When to Use	Returns if Not Found	Modifies Original Array?
+find()	The first element that matches the condition	When you need the actual object/value	undefined	❌ No
+findIndex()	The index of the first matching element	When you need the position to update/remove	-1	❌ No
+📦 Example Array
+const users = [
+  { id: 1, name: "Alice", age: 22 },
+  { id: 2, name: "Bob", age: 17 },
+  { id: 3, name: "Charlie", age: 25 }
+];
+
+🧠 Example Usage
+Code	Result	Explanation
+users.find(user => user.age > 18)	{ id: 1, name: "Alice", age: 22 }	Returns first user older than 18
+users.findIndex(user => user.age > 18)	0	Index of first user older than 18
+users.find(user => user.age < 10)	undefined	No match found
+users.findIndex(user => user.age < 10)	-1	No match found
+🛠 Real-World Example (Update User)
+const index = users.findIndex(user => user.id === 2);
+
+if (index !== -1) {
+  users[index].age = 18;
+}
+
+
+👉 Use findIndex() when you need to update or delete an item.
+
+⚡ Quick Comparison Code
+const numbers = [10, 20, 30, 40];
+
+numbers.find(n => n > 25);      // 30
+numbers.findIndex(n => n > 25); // 2
+******************************************
+
