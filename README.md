@@ -975,3 +975,219 @@ sort().reverse()	Sort ascending → then descending
 Both modify original?	✅ Yes
 
 ******************************************************
+
+Array.filter()
+
+| Feature                      | Description                                                                                                        |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| **Purpose**                  | Creates a **new array** containing elements that pass a test                                                       |
+| **Original Array Modified?** | ❌ No, original array remains unchanged                                                                             |
+| **Type**                     | Array method                                                                                                       |
+| **Callback Function**        | `(element, index, array) => boolean`                                                                               |
+| **Return Value**             | New filtered array                                                                                                 |
+| **Parameters**               | `element` – current item <br> `index` – optional index of item <br> `array` – optional reference to original array |
+| **Chaining**                 | ✅ Can chain with `map()`, `sort()`, `reduce()`, etc.                                                               |
+| **Common Use Case**          | Filtering numbers, strings, objects based on condition                                                             |
+
+Filter Numbers Greater Than 10
+const numbers = [5, 12, 8, 20];
+const result = numbers.filter(num => num > 10);
+console.log(result); // [12, 20]
+
+✅ Filter Strings
+const names = ["John", "Jane", "Alice"];
+const result = names.filter(name => name.startsWith("J"));
+console.log(result); // ["John", "Jane"]
+
+✅ Filter Objects
+const users = [
+  { name: "John", age: 20 },
+  { name: "Jane", age: 25 }
+];
+
+const adults = users.filter(user => user.age >= 21);
+console.log(adults);
+// [{ name: "Jane", age: 25 }]
+
+✅ Filter Even Numbers
+const nums = [1, 2, 3, 4, 5, 6];
+const evens = nums.filter(n => n % 2 === 0);
+console.log(evens); // [2, 4, 6]
+
+**filter() vs map()**
+
+| Feature         | `filter()`                            | `map()`                                     |
+| --------------- | ------------------------------------- | ------------------------------------------- |
+| Purpose         | Keep elements that meet condition     | Transform elements                          |
+| Return          | New array with **subset** of elements | New array with **all elements transformed** |
+| Callback Return | `true` / `false`                      | Any value (new transformed value)           |
+| Original Array  | ❌ Not modified                        | ❌ Not modified                              |
+
+
+*********************************************
+**Array.reduce()**
+| Feature                      | Description                                                                                                                                               |
+| ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Purpose**                  | Reduce array to a **single value** by repeatedly applying a function                                                                                      |
+| **Original Array Modified?** | ❌ No                                                                                                                                                      |
+| **Syntax**                   | `array.reduce((accumulator, currentValue, index, array) => { ... }, initialValue)`                                                                        |
+| **Callback Parameters**      | `accumulator` → accumulated value so far<br>`currentValue` → current element<br>`index` (optional) → current index<br>`array` (optional) → original array |
+| **Initial Value**            | Optional starting value for `accumulator`. If not provided, the first array element is used.                                                              |
+| **Return Value**             | Single value of any type (number, string, object, array, etc.)                                                                                            |
+| **Chaining**                 | ✅ Can chain with `map()`, `filter()`, `sort()`, etc.                                                                                                      |
+| **Use Cases**                | Sum, product, max/min, flatten arrays, group items, create objects                                                                                        |
+🔹 Basic Syntax
+const result = arr.reduce((accumulator, currentValue) => {
+  return accumulator + currentValue;
+}, 0);
+
+
+0 → initial value of accumulator
+
+accumulator accumulates result
+
+currentValue is each element
+
+🔹 Examples
+✅ Sum of Numbers
+const numbers = [1, 2, 3, 4, 5];
+const sum = numbers.reduce((acc, val) => acc + val, 0);
+console.log(sum); // 15
+
+✅ Product of Numbers
+const numbers = [1, 2, 3, 4];
+const product = numbers.reduce((acc, val) => acc * val, 1);
+console.log(product); // 24
+
+✅ Find Maximum Value
+const numbers = [10, 5, 20, 8];
+const max = numbers.reduce((acc, val) => (val > acc ? val : acc), numbers[0]);
+console.log(max); // 20
+
+✅ Flatten an Array of Arrays
+const nested = [[1, 2], [3, 4], [5]];
+const flat = nested.reduce((acc, val) => acc.concat(val), []);
+console.log(flat); // [1, 2, 3, 4, 5]
+
+✅ Count Occurrences in Array
+const fruits = ["apple", "banana", "apple", "orange", "banana"];
+const count = fruits.reduce((acc, fruit) => {
+  acc[fruit] = (acc[fruit] || 0) + 1;
+  return acc;
+}, {});
+
+console.log(count);
+// { apple: 2, banana: 2, orange: 1 }
+
+**reduce() vs map() / filter()**
+
+| Feature                 | `reduce()`                       | `map()`                    | `filter()`                       |
+| ----------------------- | -------------------------------- | -------------------------- | -------------------------------- |
+| Purpose                 | Reduce array to **single value** | Transform **each element** | Keep **elements that pass test** |
+| Returns                 | Any type                         | Array of same length       | Array of subset                  |
+| Callback Must Return    | ✅ accumulator                    | ✅ new value                | ✅ boolean                        |
+| Original Array Modified | ❌ No                             | ❌ No                       | ❌ No                             |
+
+**********************************************
+**split() vs join()**
+
+| Feature           | `split()`                                                                          | `join()`                                                         |
+| ----------------- | ---------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| Purpose           | Converts a **string → array**                                                      | Converts an **array → string**                                   |
+| Syntax            | `string.split(separator, limit)`                                                   | `array.join(separator)`                                          |
+| Parameters        | `separator` → string or regex to split on <br> `limit` → optional number of pieces | `separator` → string to insert between elements (default is `,`) |
+| Returns           | New array of substrings                                                            | New string                                                       |
+| Modifies Original | ❌ No                                                                               | ❌ No                                                             |
+| Common Use        | Split sentences, CSV parsing, tokenize strings                                     | Combine array elements, create strings from arrays               |
+
+**********************************************
+use of ...spread operator in js array tpo create a shallow copy
+
+| Use Case                      | Description                           | Example                                                          | Output                             |
+| ----------------------------- | ------------------------------------- | ---------------------------------------------------------------- | ---------------------------------- |
+| **Copy Array**                | Create a **shallow copy** of an array | `const arr = [1,2,3]; const copy = [...arr];`                    | `[1,2,3]`                          |
+| **Merge Arrays**              | Combine multiple arrays               | `const a=[1]; const b=[2,3]; const merged=[...a,...b];`          | `[1,2,3]`                          |
+| **Add Elements**              | Add elements while copying            | `const arr=[2,3]; const newArr=[1,...arr,4];`                    | `[1,2,3,4]`                        |
+| **Copy Array of Objects**     | Shallow copy objects inside array     | `const users=[{name:'John'}]; const copy=[...users];`            | `[ {name:'John'} ]`                |
+| **Add Object to Array**       | Add new object while keeping existing | `const newUsers=[...users,{name:'Jane'}];`                       | `[ {name:'John'}, {name:'Jane'} ]` |
+| **Update Object in Array**    | Create new array with updated object  | `const updated = users.map(u=>u.name==='John'?{...u,age:25}:u);` | `[ {name:'John', age:25} ]`        |
+| **Convert Iterable to Array** | Spread a string or Set into array     | `const arr=[...'hello'];`                                        | `['h','e','l','l','o']`            |
+
+*****************************************************************
+**Array destructuring:**
+| Use Case                        | Description                            | Example                                          | Output                |
+| ------------------------------- | -------------------------------------- | ------------------------------------------------ | --------------------- |
+| **Basic Assignment**            | Assign array elements to variables     | `const arr=[1,2,3]; const [a,b,c]=arr;`          | `a=1, b=2, c=3`       |
+| **Skip Elements**               | Skip elements using commas             | `const [x,,y]=arr;`                              | `x=1, y=3`            |
+| **Default Values**              | Assign default if element is undefined | `const [p,q,r=5]=[1,2];`                         | `p=1, q=2, r=5`       |
+| **Rest Pattern**                | Collect remaining elements into array  | `const [first,...rest]=arr;`                     | `first=1, rest=[2,3]` |
+| **Swap Variables**              | Swap values without temp variable      | `let a=1,b=2; [a,b]=[b,a];`                      | `a=2, b=1`            |
+| **Nested Arrays**               | Destructure nested arrays              | `const arr2=[1,[2,3]]; const [i,[j,k]]=arr2;`    | `i=1, j=2, k=3`       |
+| **Destructure Function Return** | Assign multiple return values          | `function f(){ return [1,2]; } const [x,y]=f();` | `x=1, y=2`            |
+| **Ignore Rest**                 | Only take some elements                | `const [a,b]=[1,2,3,4];`                         | `a=1, b=2`            |
+
+************************************************************************
+
+**JS Set**
+
+| Feature / Method        | Description                           | Syntax / Example                             | Output / Result |
+| ----------------------- | ------------------------------------- | -------------------------------------------- | --------------- |
+| **Create Set**          | Create a new Set (unique values only) | `const s = new Set([1,2,2,3]);`              | `Set {1,2,3}`   |
+| **add()**               | Add a value to the Set                | `s.add(4);`                                  | `Set {1,2,3,4}` |
+| **delete()**            | Remove a value                        | `s.delete(2);`                               | `Set {1,3,4}`   |
+| **has()**               | Check if value exists                 | `s.has(3);`                                  | `true`          |
+| **size**                | Get number of elements                | `s.size;`                                    | `3`             |
+| **clear()**             | Remove all elements                   | `s.clear();`                                 | `Set {}`        |
+| **forEach()**           | Iterate over values                   | `s.forEach(v=>console.log(v));`              | Prints 1,3,4    |
+| **Spread operator**     | Convert Set → Array                   | `const arr=[...s];`                          | `[1,3,4]`       |
+| **Convert Array → Set** | Remove duplicates from array          | `const arr=[1,2,2,3]; const s=new Set(arr);` | `Set {1,2,3}`   |
+| **Convert Set → Array** | `Array.from(s)` or `[...s]`           | `const arr=Array.from(s);`                   | `[1,2,3]`       |
+************************************************************************
+**JS MAP**
+Keys can be any type – string, number, object, or even functions:
+
+const obj = {};
+const m = new Map();
+m.set(obj, "value");
+console.log(m.get(obj)); // "value"
+
+Maintains insertion order – unlike plain objects.
+Useful for counting, mapping, or caching data with non-string keys.
+
+| Feature / Method        | Description                           | Syntax / Example                             | Output / Result                    |
+| ----------------------- | ------------------------------------- | -------------------------------------------- | ---------------------------------- |
+| **Create Map**          | Create a new Map                      | `const m = new Map([ ['a',1], ['b',2] ]);`   | `Map { 'a' => 1, 'b' => 2 }`       |
+| **set()**               | Add or update a key-value pair        | `m.set('c',3);`                              | `Map { 'a'=>1, 'b'=>2, 'c'=>3 }`   |
+| **get()**               | Get value by key                      | `m.get('a');`                                | `1`                                |
+| **has()**               | Check if key exists                   | `m.has('b');`                                | `true`                             |
+| **delete()**            | Remove key-value pair                 | `m.delete('b');`                             | `Map { 'a'=>1, 'c'=>3 }`           |
+| **size**                | Number of key-value pairs             | `m.size;`                                    | `2`                                |
+| **clear()**             | Remove all key-value pairs            | `m.clear();`                                 | `Map {}`                           |
+| **keys()**              | Return iterator of keys               | `m.keys();`                                  | `MapIterator { 'a', 'c' }`         |
+| **values()**            | Return iterator of values             | `m.values();`                                | `MapIterator { 1, 3 }`             |
+| **entries()**           | Return iterator of [key, value] pairs | `m.entries();`                               | `MapIterator { ['a',1], ['c',3] }` |
+| **forEach()**           | Iterate over Map                      | `m.forEach((v,k)=>console.log(k,v));`        | Prints `a 1`, `c 3`                |
+| **Spread operator**     | Convert Map to array                  | `const arr=[...m];`                          | `[ ['a',1], ['c',3] ]`             |
+| **Convert Array → Map** | From key-value pairs array            | `const m = new Map([ ['x',10], ['y',20] ]);` | `Map { 'x'=>10, 'y'=>20 }`         |
+
+************************************
+ set vs weakset()
+ Key Differences Between Set and WeakSet
+Feature	Set	WeakSet
+References	Strong reference	Weak reference
+Garbage Collection	Object stays in memory until removed from Set	Object can be garbage collected if no other references exist
+Iterable	✅ Yes	❌ No
+Size	✅ .size property available	❌ No .size
+Values Allowed	Objects, primitives	Objects only
+Use Case	Store unique values safely	Track objects without preventing GC
+🔹 Summary
+Using Set keeps a strong reference, so the object will not be garbage collected even if you set your variable to null.
+Using WeakSet keeps a weak reference, so the object can be garbage collected when there are no other references.
+Set is iterable and has .size. WeakSet is not iterable and has no .size.
+
+<img width="652" height="806" alt="image" src="https://github.com/user-attachments/assets/254a8cd4-d379-4880-809e-cc9086edecfb" />
+
+WeakSet vs WeakMap Summary Table
+<img width="799" height="812" alt="image" src="https://github.com/user-attachments/assets/783b773c-5716-4ec6-8391-3696074c42e7" />
+
+
