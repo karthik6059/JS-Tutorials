@@ -779,3 +779,199 @@ arr.forEach((value, index) => {
 });
 
 ************************************************************
+
+**Array.map()**
+Array.map() in JavaScript (Transforming Data)
+Array.map() is used to transform each element of an array and return a new array with the transformed values.
+It does not modify the original array.
+
+✅ Syntax
+**array.map((element, index, array) => {
+  return transformedElement;
+});**
+
+Parameter	Description
+  element	Current item being processed
+  index (optional)	Index of current element
+  array (optional)	Original array
+  Returns	A new transformed array
+🔹 Basic Example
+const numbers = [1, 2, 3, 4];
+const doubled = numbers.map(num => num * 2);
+console.log(doubled); // [2, 4, 6, 8]
+✔ Original array remains unchanged
+✔ Returns new transformed array
+🔹 Transform Objects Example
+const users = [
+  { name: "John", age: 20 },
+  { name: "Jane", age: 25 }
+];
+const names = users.map(user => user.name);
+console.log(names); // ["John", "Jane"]
+
+| Feature                 | `map()` | `forEach()` |
+| ----------------------- | ------- | ----------- |
+| Returns new array       | ✅ Yes   | ❌ No        |
+| Used for transformation | ✅ Yes   | ❌ Not ideal |
+| Can chain methods       | ✅ Yes   | ❌ No        |
+
+
+*****************************************************
+
+sort() vs reverse()
+
+JavaScript sort() vs reverse()
+| Feature                  | `sort()`         | `reverse()`                   |
+| ------------------------ | ---------------- | ----------------------------- |
+| Purpose                  | Sort elements    | Reverse order of elements     |
+| Modifies Original Array  | ✅ Yes            | ✅ Yes                         |
+| Returns                  | Sorted array     | Reversed array                |
+| Default Behavior         | Sorts as strings | Simply reverses current order |
+| Compare Function Needed? | ✅ For numbers    | ❌ No                          |
+| Time Complexity          | ~O(n log n)      | O(n)                          |
+
+🔹 1️⃣ sort() Examples
+✅ Default Sort (String-based)
+const arr = [10, 2, 1];
+arr.sort();
+
+console.log(arr);
+// [1, 10, 2]  (Wrong for numbers)
+
+
+Because it sorts as strings:
+
+"1", "10", "2"
+
+✅ Sort Numbers (Ascending)
+const arr = [1, 4, 5, 2, 7, 6];
+arr.sort((a, b) => a - b);
+
+console.log(arr);
+// [1, 2, 4, 5, 6, 7]
+
+✅ Sort Numbers (Descending)
+arr.sort((a, b) => b - a);
+
+console.log(arr);
+// [7, 6, 5, 4, 2, 1]
+
+✅ Sort Strings
+const names = ["John", "Alice", "Bob"];
+names.sort();
+
+console.log(names);
+// ["Alice", "Bob", "John"]
+
+✅ Sort Objects by Property
+const users = [
+  { name: "John", age: 25 },
+  { name: "Alice", age: 20 }
+];
+
+users.sort((a, b) => a.age - b.age);
+
+console.log(users);
+
+🔹 2️⃣ reverse() Examples
+✅ Reverse Array
+const arr = [1, 2, 3, 4];
+arr.reverse();
+
+console.log(arr);
+// [4, 3, 2, 1]
+
+✅ Reverse After Sort (Descending Alternative)
+const arr = [1, 4, 5, 2, 7, 6];
+
+arr.sort((a, b) => a - b).reverse();
+
+console.log(arr);
+// [7, 6, 5, 4, 2, 1]
+
+🔹 Important Differences
+Scenario	Result
+sort() only	Orders elements
+reverse() only	Flips current order
+sort().reverse()	Sort ascending → then descending
+Both modify original?	✅ Yes
+
+*******************************************************
+**sort() vs reverse() **
+
+| Feature                  | `sort()`         | `reverse()`                   |
+| ------------------------ | ---------------- | ----------------------------- |
+| Purpose                  | Sort elements    | Reverse order of elements     |
+| Modifies Original Array  | ✅ Yes            | ✅ Yes                         |
+| Returns                  | Sorted array     | Reversed array                |
+| Default Behavior         | Sorts as strings | Simply reverses current order |
+| Compare Function Needed? | ✅ For numbers    | ❌ No                          |
+| Time Complexity          | ~O(n log n)      | O(n)                          |
+
+1️⃣ sort() Examples
+✅ Default Sort (String-based)
+const arr = [10, 2, 1];
+arr.sort();
+
+console.log(arr);
+// [1, 10, 2]  (Wrong for numbers)
+
+
+Because it sorts as strings:
+
+"1", "10", "2"
+
+✅ Sort Numbers (Ascending)
+const arr = [1, 4, 5, 2, 7, 6];
+arr.sort((a, b) => a - b);
+
+console.log(arr);
+// [1, 2, 4, 5, 6, 7]
+
+✅ Sort Numbers (Descending)
+arr.sort((a, b) => b - a);
+
+console.log(arr);
+// [7, 6, 5, 4, 2, 1]
+
+✅ Sort Strings
+const names = ["John", "Alice", "Bob"];
+names.sort();
+
+console.log(names);
+// ["Alice", "Bob", "John"]
+
+✅ Sort Objects by Property
+const users = [
+  { name: "John", age: 25 },
+  { name: "Alice", age: 20 }
+];
+
+users.sort((a, b) => a.age - b.age);
+
+console.log(users);
+
+🔹 2️⃣ reverse() Examples
+✅ Reverse Array
+const arr = [1, 2, 3, 4];
+arr.reverse();
+
+console.log(arr);
+// [4, 3, 2, 1]
+
+✅ Reverse After Sort (Descending Alternative)
+const arr = [1, 4, 5, 2, 7, 6];
+
+arr.sort((a, b) => a - b).reverse();
+
+console.log(arr);
+// [7, 6, 5, 4, 2, 1]
+
+🔹 Important Differences
+Scenario	Result
+sort() only	Orders elements
+reverse() only	Flips current order
+sort().reverse()	Sort ascending → then descending
+Both modify original?	✅ Yes
+
+******************************************************
