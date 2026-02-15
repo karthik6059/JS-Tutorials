@@ -679,7 +679,7 @@ slice() does not modify the original array — it’s purely for extracting a po
 | `[1,2].concat([3,[4]])` | `[1,2,3,[4]]` | Does **not** flatten deeply |
 
 **********************************
-Array.indexOf() method
+Array.indexOf() method rteurns -1 of values not exist
 
 | Feature                      | Description                                                                |
 | ---------------------------- | -------------------------------------------------------------------------- |
@@ -693,6 +693,18 @@ Array.indexOf() method
 | **Parameters**               | `searchElement` – value to find<br>`fromIndex` (optional) – start position |
 | **Works With**               | Primitive values (number, string, boolean)                                 |
 | **Object Comparison**        | Compares by reference, not by value                                        |
+
+Array.includes() => used to check value exist inside array and case sensitive
+
+| Feature            | Description                                                                           |
+| ------------------ | ------------------------------------------------------------------------------------- |
+| **Purpose**        | Checks if an array contains a specific element                                        |
+| **Syntax**         | `array.includes(value, startIndex)`                                                   |
+| **Parameters**     | `value` – Element to search for<br>`startIndex` (optional) – Index to start searching |
+| **Returns**        | `true` or `false`                                                                     |
+| **Case Sensitive** | Yes (for strings inside arrays)                                                       |
+| **Example**        | `["apple", "banana"].includes("apple")` → `true`                                      |
+
 
 **Note**
 No — indexOf() does NOT perform type coercion.
@@ -739,4 +751,31 @@ const numbers = [10, 20, 30, 40];
 numbers.find(n => n > 25);      // 30
 numbers.findIndex(n => n > 25); // 2
 ******************************************
+**Array.foreach()**
+| Feature                 | `for...of`                             | `forEach()`                        |
+| ----------------------- | -------------------------------------- | ---------------------------------- |
+| **Type**                | Loop statement                         | Array method                       |
+| **Works On**            | Any iterable (Array, String, Map, Set) | Arrays only                        |
+| **Syntax**              | `for (const item of arr)`              | `arr.forEach((item, index) => {})` |
+| **Access Index**        | ❌ Not directly (need manual counter)   | ✅ Provided as parameter            |
+| **Break / Continue**    | ✅ Supported                            | ❌ Not supported                    |
+| **Return Value**        | None                                   | Always `undefined`                 |
+| **Async/Await Support** | ✅ Works properly                       | ⚠️ Does not wait for `await`       |
+| **Readability**         | Very clean                             | Clean but callback-based           |
 
+Example
+✅ for...of
+const arr = [10, 20, 30];
+
+for (const value of arr) {
+  console.log(value);
+}
+
+✅ forEach()
+const arr = [10, 20, 30];
+
+arr.forEach((value, index) => {
+  console.log(value);
+});
+
+************************************************************
