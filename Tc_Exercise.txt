@@ -369,6 +369,92 @@ Inputs/Rules to Consider:
 | P5 | System recovery                             | System restart during coupon application                 | Transactions consistent; no coupon duplication        | Performance |
 
 
+**************************************************************************
+Exercise 8: Design complete test cases for 'Order Cancellation' considering functional, negative, boundary, security, integration, and performance aspects. Guidance: - Identify inputs and rules - Apply boundary conditions - Consider failure scenarios - Think about integration impact - Include regression areas - Consider automation readiness cretae dummy dummy business requirments also
+
+Dummy Business Requirements for Order Cancellation
+
+BR1: A customer can cancel an order if the order status is “Pending” or “Processing”.
+
+BR2: Orders with status “Shipped” or “Delivered” cannot be canceled.
+
+BR3: Cancelling an order should refund the amount to the original payment method.
+
+BR4: The system must send a confirmation email and SMS to the customer upon successful cancellation.
+
+BR5: Only the order owner or admin can cancel the order.
+
+BR6: The system should log all cancellations for auditing purposes.
+
+BR7: If multiple orders are being canceled concurrently, system performance should not degrade beyond 2 seconds per transaction.
+
+BR8: System should handle network failures gracefully and retry cancellation up to 3 times before failure.
+
+| Test Type                     | Coverage Area                          | Key Scenarios Covered                                                                                                                           |
+| ----------------------------- | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Functional**                | Order status & cancellation            | Cancel orders in “Pending” and “Processing”; admin cancellation; refund issued; email/SMS confirmation with correct order details               |
+| **Negative**                  | Unauthorized actions, invalid inputs   | Non-owner cancellation, invalid Order ID, cancel already canceled order, cancel without login, payment failure during cancellation              |
+| **Boundary**                  | Order limits & time restrictions       | Cancel at exact allowed time; cancel after cutoff; minimum and maximum items per order; large volume orders                                     |
+| **Security**                  | Authorization & data protection        | SQL injection attempts; canceling others’ orders; session timeout handling; API/data tampering validation                                       |
+| **Integration**               | External systems & notifications       | Payment gateway refund verification; email/SMS content and correctness; audit log validation; inventory update                                  |
+| **Performance / Concurrency** | System response under load             | Single order response <2s; bulk/concurrent order cancellations ≤2s per order; retry handling on network failure; mixed order actions under load |
+| **Regression Areas**          | Critical features to retest            | Refund processing, notification system, order status transitions, audit logging, admin override functionality                                   |
+| **Automation Readiness**      | Feasible scenarios for automated tests | Functional flows, negative input checks, boundary checks, email/SMS verification, integration stubs/mocks; parameterized load tests             |
+
+*********************************************************************************************************.
+
+Exercise 9: Design complete test cases for 'Bank Fund Transfer' considering functional, negative,
+boundary, security, integration, and performance aspects.
+Guidance: - Identify inputs and rules - Apply boundary conditions - Consider failure scenarios -
+Think about integration impact - Include regression areas - Consider automation readiness
 
 
+| Test Type                   | Coverage Area                  | Key Scenarios Covered                                                                                                                                                         |
+| --------------------------- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Functional**              | Fund transfers & balances      | Transfer between own accounts, transfer to other customers, different payment modes, transaction history, optional notes, valid recipient account & IFSC                      |
+| **Negative**                | Invalid operations & inputs    | Insufficient funds, daily limit exceeded, invalid recipient account, invalid IFSC, blank recipient details, duplicate transfer, unauthorized transfer, transfer without login |
+| **Boundary**                | Amount & limits                | Minimum transfer amount, maximum single transfer amount, cumulative daily limit, maximum note length                                                                          |
+| **Security**                | Authentication & authorization | Unauthorized access, session timeout, cross-user access attempts, SQL injection in input fields                                                                               |
+| **Integration**             | External systems               | Payment gateway (IMPS/NEFT/UPI), email/SMS notifications including recipient & refund details, audit logs, balance update in core banking system                              |
+| **Performance/Concurrency** | System load & response time    | Single & concurrent transfers, bulk transfers, retry mechanism on network failure, response time ≤ 2 seconds per transaction                                                  |
+| **Regression Areas**        | Critical features              | Balance updates, duplicate transfer prevention, notifications, audit logging, payment gateway integration                                                                     |
+| **Automation Readiness**    | Test feasibility               | Functional flows, negative scenarios, boundary checks, recipient & IFSC validation, email/SMS verification, load testing scripts                                              |
+*********************************************************************************************************.
+Exercise 10: Design complete test cases for 'Loan Application' considering functional, negative,
+boundary, security, integration, and performance aspects.
+Guidance: - Identify inputs and rules - Apply boundary conditions - Consider failure scenarios -
+Think about integration impact - Include regression areas - Consider automation readiness
 
+Dummy Business Requirements for Loan Application
+
+BR1: Customers can apply for loans if they are 18 years or older and have a valid account.
+
+BR2: Maximum loan amount is $500,000; minimum is $1,000.
+
+BR3: Interest rates depend on loan type (personal, home, auto) and customer credit score.
+
+BR4: Customer must submit valid documents (ID proof, income proof, address proof).
+
+BR5: Loan application status can be “Pending”, “Approved”, or “Rejected”.
+
+BR6: Only authenticated users can submit loan applications.
+
+BR7: Loan approval requires credit score verification and income validation.
+
+BR8: Notifications (email/SMS) are sent on submission, approval, or rejection.
+
+BR9: System should prevent duplicate applications for the same loan type within 30 days.
+
+BR10: System should handle multiple concurrent loan applications efficiently.
+
+| Test Type                   | Coverage Area                             | Key Scenarios Covered                                                                                                                                                                                                                           |
+| --------------------------- | ----------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Functional**              | Loan submission & workflows               | Submit loan applications, check application status, approval/rejection workflow, prevent duplicate same-type applications within 30 days, allow multiple different loan types simultaneously, correct SMS/email notifications with loan details |
+| **Negative**                | Invalid inputs & business rule violations | Age < 18, missing or invalid documents, invalid loan amounts, non-numeric inputs, unauthorized access, duplicate same-type application within 30 days, exceeding upper age limit, submission without login                                      |
+| **Boundary**                | Age & loan amount limits                  | Minimum loan amount ($1,000), maximum loan amount ($500,000), minimum age 18, maximum age for senior citizens (e.g., 65–70), duplicate application window (30 days)                                                                             |
+| **Security**                | Authentication & input protection         | Unauthorized access, cross-user access attempts, session timeout, SQL injection, input sanitization                                                                                                                                             |
+| **Integration**             | External systems & notifications          | Credit score verification, income verification, document verification, email/SMS notifications with correct loan details, audit logging                                                                                                         |
+| **Performance/Concurrency** | System load & response                    | Single & concurrent loan submissions, bulk applications, retry on network failure, system response ≤ 2 seconds per submission                                                                                                                   |
+| **Regression Areas**        | Critical loan features                    | Loan approval/rejection logic, duplicate application prevention, document validation, notifications, audit logging                                                                                                                              |
+| **Automation Readiness**    | Feasible automated tests                  | Functional flows, boundary & negative checks, duplicate prevention, age validation, SMS/email verification, load testing scripts                                                                                                                |
+*********************************************************************************************************.
