@@ -268,6 +268,106 @@ Adding same product twice updates quantity (or creates separate line based on ru
 |                      | Network interruption         | No duplicate entries                          |
 
 ************************************************************************************************************************************************
+Exercise 6: Exercise 6: Design complete test cases for 'Checkout & Payment' considering functional, negative,
+boundary, security, integration, and performance aspects.
+Guidance: - Identify inputs and rules - Apply boundary conditions - Consider failure scenarios -
+Think about integration impact - Include regression areas - Consider automation readiness
+Solution:
+| TC ID | Category         | Scenario                               | Expected Result                        | Priority |
+| ----- | ---------------- | -------------------------------------- | -------------------------------------- | -------- |
+| TC_01 | Authentication   | Only logged-in user can checkout       | Redirect to login if not authenticated | P0       |
+| TC_02 | Authentication   | Logged-in user = registered order user | Order linked to correct user ID        | P0       |
+| TC_03 | Authentication   | Session expired during checkout        | Redirect to login                      | P0       |
+| TC_04 | Functional       | Valid payment (card)                   | Payment success, order created         | P0       |
+| TC_05 | Functional       | Payment via PayPal                     | Redirect & successful confirmation     | P1       |
+| TC_06 | Functional       | Gift card partial payment              | Remaining balance calculated correctly | P1       |
+| TC_07 | Calculation      | Subtotal calculation                   | Correct sum of items                   | P0       |
+| TC_08 | Calculation      | Tax calculation (8%)                   | Correct tax applied                    | P0       |
+| TC_09 | Calculation      | Shipping below $100                    | $5 applied                             | P0       |
+| TC_10 | Calculation      | Shipping ≥ $100                        | Free shipping                          | P0       |
+| TC_11 | Calculation      | Final total validation                 | Backend amount = UI amount             | P0       |
+| TC_12 | Currency         | Currency conversion accuracy           | Correct exchange rate applied          | P1       |
+| TC_13 | Currency         | Currency mismatch (UI vs gateway)      | Transaction blocked                    | P1       |
+| TC_14 | Boundary         | Max transaction = $10,000              | Allowed                                | P1       |
+| TC_15 | Boundary         | > $10,000                              | Rejected                               | P1       |
+| TC_16 | Boundary         | Empty cart                             | Checkout blocked                       | P0       |
+| TC_17 | Negative         | Invalid card number                    | Validation error                       | P0       |
+| TC_18 | Negative         | Expired card                           | Rejected                               | P0       |
+| TC_19 | Negative         | Incorrect CVV                          | Rejected                               | P0       |
+| TC_20 | Negative         | Insufficient balance                   | Payment declined, no order created     | P0       |
+| TC_21 | Negative         | Double-click Pay                       | Single order created                   | P0       |
+| TC_22 | Failure Handling | Gateway failure                        | Error shown, no order created          | P0       |
+| TC_23 | Failure Handling | DB check after failure                 | No order record                        | P0       |
+| TC_24 | Failure Handling | Inventory after failure                | Stock unchanged                        | P0       |
+| TC_25 | OTP              | Valid OTP                              | Payment success                        | P1       |
+| TC_26 | OTP              | Invalid OTP                            | Error message                          | P1       |
+| TC_27 | OTP              | 3 invalid OTP attempts                 | Transaction declined                   | P1       |
+| TC_28 | OTP              | Expired OTP                            | Expiry message                         | P1       |
+| TC_29 | Security         | Modify price in DOM                    | Backend recalculates correct amount    | P0       |
+| TC_30 | Security         | Modify hidden total field              | Ignored by server                      | P0       |
+| TC_31 | Security         | SQL Injection attempt                  | Input sanitized                        | P0       |
+| TC_32 | Security         | XSS in input fields                    | Script not executed                    | P1       |
+| TC_33 | Security         | HTTPS enforcement                      | HTTP redirects to HTTPS                | P1       |
+| TC_34 | Security         | Card data masking                      | Card number masked                     | P1       |
+| TC_35 | Security         | CVV not stored                         | CVV not persisted                      | P0       |
+| TC_36 | Integration      | Payment gateway success mapping        | Correct status handled                 | P0       |
+| TC_37 | Integration      | Inventory reduction on success         | Stock reduced                          | P0       |
+| TC_38 | Integration      | Email confirmation                     | Email sent on success                  | P1       |
+| TC_39 | Integration      | Refund updates order                   | Order status updated                   | P2       |
+| TC_40 | User Data        | User details auto-populated            | Correct data shown                     | P1       |
+| TC_41 | User Data        | Address tampering                      | Access denied                          | P0       |
+| TC_42 | Performance      | 100 concurrent users                   | Response < 3 sec                       | P1       |
+| TC_43 | Performance      | 1000 concurrent users                  | System stable                          | P2       |
+| TC_44 | Performance      | Large cart (100 items)                 | Total calculated correctly             | P1       |
+| TC_45 | Regression       | Verify tax logic after update          | No miscalculation                      | P0       |
+| TC_46 | Regression       | Verify payment + order link            | Correct mapping                        | P0       |
+
+*********************************************************************************************************************
+Exercise 7: Design complete test cases for 'Coupon Engine' considering functional, negative, boundary, security, integration, and performance aspects. Guidance: - Identify inputs and rules - Apply boundary conditions - Consider failure scenarios - Think about integration impact - Include regression areas - Consider automation readiness
+
+Understanding the System
+Inputs/Rules to Consider:
+	Coupon types: Percentage discount, fixed amount discount, free shipping, buy-one-get-one.
+	Validity: Start date, end date, usage limit per user, minimum purchase amount, applicable products/categories.
+	User eligibility: New users, existing users, VIP members, or region-specific users.
+	Combinability: Single coupon per order vs multiple coupons allowed.
+	System triggers: Online checkout, API calls, mobile app, third-party integrations.
+| ID | Test Case                                   | Input / Precondition                                     | Expected Result                                       | Type        |
+| -- | ------------------------------------------- | -------------------------------------------------------- | ----------------------------------------------------- | ----------- |
+| F1 | Apply valid coupon                          | Valid coupon code, eligible products, meets min purchase | Discount applied correctly to order total             | Functional  |
+| F2 | Coupon expired                              | Expired coupon code                                      | Show error: “Coupon expired”                          | Functional  |
+| F3 | Coupon not started                          | Coupon valid from future date                            | Show error: “Coupon not active yet”                   | Functional  |
+| F4 | Usage limit reached                         | User has used coupon max times                           | Show error: “Coupon usage limit reached”              | Functional  |
+| F5 | Coupon applicable only to specific category | Coupon for Electronics, cart has Electronics             | Discount applied correctly                            | Functional  |
+| F6 | Coupon not applicable to cart               | Coupon for Electronics, cart has Clothing                | Show error: “Coupon not applicable”                   | Functional  |
+| F7 | Multiple coupons applied                    | Two non-combinable coupons                               | Show error: “Cannot combine coupons”                  | Functional  |
+| F8 | Free shipping coupon                        | Coupon for free shipping                                 | Shipping cost is zero                                 | Functional  |
+| N1 | Invalid coupon code                         | Random string                                            | Show error: “Invalid coupon code”                     | Negative    |
+| N2 | Empty coupon code                           | Blank input                                              | Show error: “Enter coupon code”                       | Negative    |
+| N3 | SQL injection attempt                       | `'; DROP TABLE Coupons; --`                              | System rejects input; no DB impact                    | Negative    |
+| N4 | Negative discount                           | Coupon configured with negative value                    | System rejects coupon, logs error                     | Negative    |
+| N5 | Exceeding max discount                      | Coupon discount exceeds order total                      | Discount capped at order total                        | Negative    |
+| B1 | Min purchase boundary                       | Cart amount = min required for coupon                    | Discount applied                                      | Boundary    |
+| B2 | Just below min purchase                     | Cart amount = min required – $0.01                       | Coupon rejected                                       | Boundary    |
+| B3 | Usage limit boundary                        | User has used coupon max-1 times                         | Coupon applied                                        | Boundary    |
+| B4 | Coupon start/end boundary                   | Coupon start/end date exactly today                      | Coupon valid/expired per rules                        | Boundary    |
+| B5 | Max discount limit                          | Coupon with discount = maximum allowed                   | Correct discount applied                              | Boundary    |
+| S1 | Authorization                               | Coupon API accessed without login                        | Access denied / error                                 | Security    |
+| S2 | Coupon tampering                            | Modify coupon value in request                           | System validates against DB; rejects invalid discount | Security    |
+| S3 | Cross-user coupon abuse                     | Attempt to use user-specific coupon on another account   | Rejected                                              | Security    |
+| S4 | Input validation                            | Script tags, HTML injection                              | Sanitized input, no XSS                               | Security    |
+| S5 | Brute-force coupon codes                    | Multiple invalid coupon attempts                         | Temporary block or CAPTCHA triggered                  | Security    |
+| I1 | Checkout integration                        | Apply coupon via website                                 | Discount reflected; DB updated                        | Integration |
+| I2 | Payment gateway                             | Apply coupon and proceed to payment                      | Discount correctly passed to payment system           | Integration |
+| I3 | API integration                             | Third-party app calls coupon API                         | Correct response with discount / error codes          | Integration |
+| I4 | Inventory system                            | Coupon for specific product                              | Only applicable products show discount                | Integration |
+| I5 | Email system                                | Coupon auto-sent to eligible users                       | Email contains correct coupon info and expiry date    | Integration |
+| P1 | High traffic                                | 10,000 simultaneous users applying coupons               | Coupons applied correctly; response time acceptable   | Performance |
+| P2 | Large cart                                  | Cart with 100+ items                                     | Coupon calculation completes within acceptable time   | Performance |
+| P3 | Batch coupon generation                     | Generate 1 million coupons                               | Coupons generated correctly; system not crashed       | Performance |
+| P4 | API stress test                             | 1000 requests/sec to coupon API                          | API responds correctly; no data loss                  | Performance |
+| P5 | System recovery                             | System restart during coupon application                 | Transactions consistent; no coupon duplication        | Performance |
+
 
 
 
