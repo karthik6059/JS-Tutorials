@@ -1190,4 +1190,134 @@ Set is iterable and has .size. WeakSet is not iterable and has no .size.
 WeakSet vs WeakMap Summary Table
 <img width="799" height="812" alt="image" src="https://github.com/user-attachments/assets/783b773c-5716-4ec6-8391-3696074c42e7" />
 
+*******************************************
+**JS Objects**
+
+Summary
+  Objects = collection of properties + methods.
+  They are mutable and can represent real-world entities.
+  Methods are just functions associated with the object.
+  Objects can also inherit properties and methods from a prototype.
+
+✅ Key takeaway:
+
+Object keys: string or symbol (numbers and booleans are converted to strings)
+Object values: keep their type, coercion only happens when used in operations
+
+| Feature         | Object                       | Map                             |
+| --------------- | ---------------------------- | ------------------------------- |
+| Key types       | Strings, Symbols             | Any type (string, number, obj…) |
+| Key coercion    | Yes (numbers → strings)      | No                              |
+| Key uniqueness  | By string/symbol             | By exact value/reference        |
+| Iteration order | Not guaranteed (except ES6+) | Guaranteed (insertion order)    |
+
+**Undefined vs. null**
+undefined → property doesn’t exist or hasn’t been assigned a value yet.
+null → property exists, but intentionally set to “no value”.
+
+✅ Key takeaway:
+Accessing non-existent properties always returns undefined.
+This is different from other languages that might throw an error for missing keys.
+Helps JS be flexible and dynamic, but can lead to bugs if you forget to check for existence.
+
+| Case                                                           | Result                              | Explanation                                               |
+| -------------------------------------------------------------- | ----------------------------------- | --------------------------------------------------------- |
+| Primitive with value (number, string, boolean, bigint, symbol) | undefined if property doesn’t exist | JS auto-boxes primitive temporarily                       |
+| Primitive is `null` or `undefined`                             | TypeError                           | Cannot create temporary object to access property         |
+| Object with missing property                                   | undefined                           | Safe, object exists so missing property returns undefined |
+
+✅ Takeaway:
+  undefined is returned for missing properties on initialized primitives (except null/undefined).
+  TypeError occurs if the primitive itself is undefined or null, because JS can’t wrap it.
+
+**Delete operator**
+Basic syntax
+  delete object.property;
+  delete object["property"];
+Removes the property from the object completely.
+After deletion, accessing that property will return undefined
+Note: delete only works on object properties, not variables declared with let, const, or var:
+
+Very Important Rule
+
+| Code        | Meaning                                 |
+| ----------- | --------------------------------------- |
+| `b.name`    | property literally called `"name"`      |
+| `b["name"]` | property literally called `"name"`      |
+| `b[name]`   | property using value of variable `name` example :
+              |b={name:"kk"}
+              {name: 'kk'}
+              b[name]
+              undefined
+              let name ="name"
+              undefined
+              b[name]
+              'kk'
+
+🚀 Simple Mental Trick
+  If it's inside quotes → property name
+  If no quotes → variable
+
+
+  | Feature                              | Dot Notation (`.`)             | Bracket Notation (`[]`)            |
+| ------------------------------------ | ------------------------------ | ---------------------------------- |
+| Basic syntax                         | `obj.name`                     | `obj["name"]`                      |
+| Property name type                   | Must be a **valid identifier** | Can be **any expression**          |
+| Requires quotes                      | ❌ No                           | ✅ Yes (if using string literal)    |
+| Dynamic property access              | ❌ Not possible                 | ✅ Yes                              |
+| Works with variables                 | ❌ No                           | ✅ Yes                              |
+| Works with spaces/special characters | ❌ No                           | ✅ Yes                              |
+| Internally converts key              | Not needed (literal)           | Converts to string (unless Symbol) |
+
+🔥 When to Use What?
+| Use Case                  | Best Choice |
+| ------------------------- | ----------- |
+| Simple known property     | `.`         |
+| Dynamic key (variable)    | `[]`        |
+| Special characters/spaces | `[]`        |
+| Numeric keys              | `[]`        |
+
+🚀 Quick Rule to Remember
+
+Use . → when you know the exact property name
+Use [] → when property name is dynamic or not a valid identifier.
+
+**Using [] in Object Keys (Computed Properties)**
+| Case              | Without `[]`     | With `[]`               | Result                       |
+| ----------------- | ---------------- | ----------------------- | ---------------------------- |
+| Literal key       | `{ name: "kk" }` | ❌ Not needed            | `{ name: "kk" }`             |
+| Variable as key   | `{ key: "kk" }`  | `{ [key]: "kk" }`       | Uses value of `key` variable |
+| Function as key   | ❌ Not possible   | `{ [getKey()]: 25 }`    | Uses function return value   |
+| Expression as key | ❌ Not possible   | `{ ["na"+"me"]: "kk" }` | Evaluates expression         |
+| Number as key     | `{ 1: "one" }`   | `{ [num]: "one" }`      | Converted to `"1"`           |
+
+Example:
+🔹 Example 1 — Variable as key
+const key = "name";
+const obj = {
+  [key]: "Karthik"
+};
+console.log(obj);
+// { name: "Karthik" }
+
+Without []:
+const obj = {
+  key: "Karthik"
+};
+// { key: "Karthik" } ❌ literal "key"
+
+
+Example🔢const propKey = 'field 12';
+const person = {
+    [propKey]: 'Max'
+};
+console.log(person['field 12']);
+VM1342:5 Max
+undefined
+const propKey = 'field 12';
+const person = {
+    [propKey]: 'Max'
+};
+console.log(person[propKey]);
+VM1347:5 Max
 
