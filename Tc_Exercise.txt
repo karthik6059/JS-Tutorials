@@ -457,4 +457,150 @@ BR10: System should handle multiple concurrent loan applications efficiently.
 | **Performance/Concurrency** | System load & response                    | Single & concurrent loan submissions, bulk applications, retry on network failure, system response ≤ 2 seconds per submission                                                                                                                   |
 | **Regression Areas**        | Critical loan features                    | Loan approval/rejection logic, duplicate application prevention, document validation, notifications, audit logging                                                                                                                              |
 | **Automation Readiness**    | Feasible automated tests                  | Functional flows, boundary & negative checks, duplicate prevention, age validation, SMS/email verification, load testing scripts                                                                                                                |
-*********************************************************************************************************.
+*********************************************************************************************************
+Exercise 11: Design complete test cases for 'Subscription Upgrade/Downgrade' considering
+functional, negative, boundary, security, integration, and performance aspects.
+Guidance: - Identify inputs and rules - Apply boundary conditions - Consider failure scenarios -
+Think about integration impact - Include regression areas - Consider automation readiness
+
+solution:
+1️⃣ Sample Business Requirements (Assumptions)
+Plans
+Plan	Monthly Price	Features	Limits
+Basic	$10	Core features	5 projects
+Pro	$25	Core + Advanced	50 projects
+Enterprise	$100	All features	Unlimited
+Key Rules
+
+Users can upgrade anytime.
+
+Upgrades are prorated immediately.
+
+Downgrades take effect at next billing cycle.
+
+Refunds are prorated for downgrades (if applicable).
+
+Payment method must be valid.
+
+Cannot downgrade if current usage exceeds lower plan limit.
+
+Enterprise requires admin approval.
+
+Taxes applied based on region.
+
+Coupons may apply.
+
+Subscription events sync with:
+
+Payment Gateway (e.g., Stripe)
+
+CRM (e.g., Salesforce)
+
+Analytics system
+
+| Test Type               | Coverage Area                  | Key Scenarios Covered                                                                                                                                                        |
+| ----------------------- | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Functional**          | Upgrade Flow                   | Basic→Pro, Pro→Enterprise, Upgrade with coupon, Feature unlock, Mid-cycle upgrade                                                                                            |
+|                         | Downgrade Flow                 | Pro→Basic, Enterprise→Pro, Downgrade blocked if usage exceeds limit, Cancel downgrade                                                                                        |
+|                         | Enterprise Plan Approval       | Admin approval required, Approval/rejection workflow, Notification/email sent                                                                                                |
+| **Negative**            | Payment / Input Validation     | Invalid/expired card, Expired coupon, Network failure, Unauthorized access, Duplicate submission, Payload tampering                                                          |
+| **Boundary**            | Usage / Time / Coupon          | Usage at plan limit, Usage above limit, Upgrade at billing cycle edge, Coupon expiry at edge timestamp, Maximum project count                                                |
+| **Security**            | Access & Data Integrity        | SQL injection, Price tampering, Replay attack, Unauthorized access, Payment data exposure, Role-based access                                                                 |
+| **Integration**         | Payment Gateway (Stripe)       | Successful charge, Declined payment, Webhook delay, Partial refund                                                                                                           |
+|                         | CRM Integration (Salesforce)   | Upgrade/downgrade event sync, Failed sync retry                                                                                                                              |
+|                         | Notification / Email           | Upgrade confirmation, Downgrade scheduled alert, Payment failure alert                                                                                                       |
+| **Billing / Proration** | Invoice Accuracy & Calculation | Billing reflects current active plan, Prorated charge correctness, Previous amount adjustment, Tax calculation per region, Coupon discount applied, Total tally verification |
+| **Performance**         | Load & Stress                  | Concurrent upgrades, Peak billing day response, Webhook spike handling, DB under heavy subscription updates                                                                  |
+| **Regression**          | Core Subscription Logic        | Billing engine, Invoice generation, Tax rules, Coupon logic, Role permissions, Feature flags, Audit logs, API backward compatibility                                         |
+| **Automation Ready**    | API / UI / Calculation Tests   | Upgrade/downgrade endpoints, Proration calculation, Payment success/failure mocks, Coupon validation, Boundary usage checks, Role validation         |
+
+
+******************************************************************************************
+Exercise 12: Design complete test cases for 'Profile Update' considering functional, negative,
+boundary, security, integration, and performance aspects.
+Guidance: - Identify inputs and rules - Apply boundary conditions - Consider failure scenarios -
+Think about integration impact - Include regression areas - Consider automation readiness
+
+
+1️⃣ Sample Business Requirements (Assumptions)
+
+Users can update: Name, Email, Phone, Address, Profile Picture, Password, Preferences.
+
+Email must be unique, valid format.
+
+Phone number must follow country-specific format.
+
+Password must meet complexity rules (min 8 chars, uppercase, number, special char).
+
+Profile picture must be JPG/PNG, max 5MB.
+
+Certain fields are mandatory: Name, Email.
+
+Changes sync with CRM and Notification system.
+
+| Test Type            | Coverage Area                     | Key Scenarios Covered                                                                                                                                   |
+| -------------------- | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Functional**       | Profile Update Flow               | Update all fields, Update optional fields, Change password, Upload profile picture, Update email                                                        |
+| **Negative**         | Input / Validation Errors         | Invalid email format, Duplicate email, Invalid phone, Weak password, Oversized profile picture, Missing mandatory fields, Unauthorized update           |
+| **Boundary**         | Field Limits & Sizes              | Name min/max length, Phone min/max length, Password min length, Profile picture size at limit                                                           |
+| **Security**         | Data & Access Protection          | SQL injection, XSS, Password encryption, Role-based access, File upload security, CSRF protection                                                       |
+| **Integration**      | External Systems                  | CRM sync (Salesforce), Email verification, Notification service update, Profile picture CDN                                                             |
+| **Performance**      | Load & Stress                     | Concurrent updates, Bulk file uploads, Database write latency, Large field updates                                                                      |
+| **Regression**       | Core Profile Functionality        | Email uniqueness, Password login, Mandatory fields, Profile picture upload, CRM & Notification sync, Audit logs                                         |
+| **Automation Ready** | API / UI / Security / Integration | API endpoint validation, Form validation, File upload checks, Boundary & negative test automation, Role & access checks, Integration event verification |
+
+****************************************************************************************************
+Exercise 13: Design complete test cases for 'File Upload Module' considering functional, negative,
+boundary, security, integration, and performance aspects.
+Guidance: - Identify inputs and rules - Apply boundary conditions - Consider failure scenarios -
+Think about integration impact - Include regression areas - Consider automation readiness
+
+Solution
+The system allows users to upload files to their account with the following specifications:
+
+Supported file types: .jpg, .png, .pdf, .docx
+
+Max file size: 10 MB
+
+Files must be virus-free
+
+File names cannot exceed 50 characters
+
+Multiple files can be uploaded simultaneously (up to 5)
+
+Upload should integrate with a cloud storage service and show progress
+
+Users can download or delete uploaded files
+
+| Test Scenario ID | Test Scenario                  | Type        | Input / Condition             | Expected Outcome                   | Automation Feasible |
+| ---------------- | ------------------------------ | ----------- | ----------------------------- | ---------------------------------- | ------------------- |
+| TS01             | Upload valid single file       | Functional  | 1 file <10 MB, supported type | Success, confirmation shown        | Yes                 |
+| TS02             | Upload multiple valid files    | Functional  | 2–5 files <10 MB              | All files uploaded successfully    | Yes                 |
+| TS03             | Download uploaded file         | Functional  | Previously uploaded file      | File downloads correctly           | Yes                 |
+| TS04             | Delete uploaded file           | Functional  | Existing file                 | File deleted from UI & DB          | Yes                 |
+| TS05             | Upload unsupported file type   | Negative    | `.exe`, `.bat`                | Error: Unsupported type            | Yes                 |
+| TS06             | Upload file exceeding max size | Negative    | >10 MB                        | Error: Exceeds max size            | Yes                 |
+| TS07             | Upload empty file              | Negative    | 0 KB file                     | Error: Cannot be empty             | Yes                 |
+| TS08             | Upload file with long name     | Negative    | >50 chars                     | Error: Name too long               | Yes                 |
+| TS09             | File size at boundary          | Boundary    | 10 MB                         | Success                            | Yes                 |
+| TS10             | File size above boundary       | Boundary    | 10.01 MB                      | Error                              | Yes                 |
+| TS11             | File name at boundary          | Boundary    | 50 chars                      | Success                            | Yes                 |
+| TS12             | File name above boundary       | Boundary    | 51 chars                      | Error                              | Yes                 |
+| TS13             | Max files in batch             | Boundary    | 5 files                       | Success                            | Yes                 |
+| TS14             | One above max batch            | Boundary    | 6 files                       | Error: Max 5 allowed               | Yes                 |
+| TS15             | Upload malicious file          | Security    | Virus/malware file            | Upload blocked, warning            | Partial             |
+| TS16             | Script injection in file name  | Security    | `<script>.pdf`                | Rejected/sanitized                 | Partial             |
+| TS17             | Unauthorized download          | Security    | File of another user          | Access denied                      | Partial             |
+| TS18             | SSL upload validation          | Security    | Intercepted network           | File encrypted in transit          | Partial             |
+| TS19             | Upload triggers DB entry       | Integration | Valid file                    | DB updated                         | Yes                 |
+| TS20             | Cloud storage sync             | Integration | Valid file                    | File in cloud                      | Yes                 |
+| TS21             | Notification sent on upload    | Integration | Valid file                    | Email/notification sent            | Partial             |
+| TS22             | Delete sync with cloud         | Integration | Deleted file                  | File removed in cloud              | Yes                 |
+| TS23             | Upload large file performance  | Performance | 10 MB file                    | Upload completes within SLA        | Partial             |
+| TS24             | Upload max batch performance   | Performance | 5 files, ~40 MB               | Handles load without crash         | Partial             |
+| TS25             | Concurrent uploads             | Performance | 10 users uploading            | No slowdown, all succeed           | Partial             |
+| TS26             | Stress test uploads            | Performance | 50 files                      | Graceful failure if limit exceeded | Partial             |
+| TS27             | Upload with network latency    | Performance | Slow connection               | Upload resumes/retries             | Partial             |
+
+
+*********************************************************************
