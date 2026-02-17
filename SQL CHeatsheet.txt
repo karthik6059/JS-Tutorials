@@ -1,0 +1,59 @@
+
+BASIC SQL Cheatsheet
+
+| Clause / Operator | Purpose                        | Example Syntax                              | Example Query                                       |
+| ----------------- | ------------------------------ | ------------------------------------------- | --------------------------------------------------- |
+| `SELECT`          | Retrieve columns               | `SELECT column FROM table;`                 | `SELECT name FROM employees;`                       |
+| `SELECT *`        | Retrieve all columns           | `SELECT * FROM table;`                      | `SELECT * FROM employees;`                          |
+| `DISTINCT`        | Remove duplicate values        | `SELECT DISTINCT column FROM table;`        | `SELECT DISTINCT department FROM employees;`        |
+| `COUNT()`         | Count rows                     | `SELECT COUNT(column) FROM table;`          | `SELECT COUNT(*) FROM employees;`                   |
+| `COUNT(DISTINCT)` | Count unique values            | `SELECT COUNT(DISTINCT column) FROM table;` | `SELECT COUNT(DISTINCT department) FROM employees;` |
+| `WHERE`           | Filter records                 | `SELECT column FROM table WHERE condition;` | `SELECT * FROM employees WHERE salary > 50000;`     |
+| `=`               | Equal to                       | `WHERE column = value`                      | `WHERE department = 'HR'`                           |
+| `!=`              | Not equal to                   | `WHERE column != value`                     | `WHERE department != 'IT'`                          |
+| `<>`              | Not equal (standard SQL)       | `WHERE column <> value`                     | `WHERE department <> 'IT'`                          |
+| `>`               | Greater than                   | `WHERE column > value`                      | `WHERE salary > 50000`                              |
+| `<`               | Less than                      | `WHERE column < value`                      | `WHERE salary < 30000`                              |
+| `>=`              | Greater than or equal          | `WHERE column >= value`                     | `WHERE salary >= 60000`                             |
+| `<=`              | Less than or equal             | `WHERE column <= value`                     | `WHERE salary <= 40000`                             |
+| `BETWEEN`         | Range filter (inclusive)       | `WHERE column BETWEEN value1 AND value2`    | `WHERE salary BETWEEN 40000 AND 60000`              |
+| `LIKE`            | Pattern matching               | `WHERE column LIKE pattern`                 | `WHERE name LIKE 'A%'`                              |
+| `%`               | Wildcard (any characters)      | `'A%'`                                      | Names starting with A                               |
+| `_`               | Single character wildcard      | `'A_'`                                      | Two-letter names starting with A                    |
+| `IN`              | Match multiple values          | `WHERE column IN (value1, value2)`          | `WHERE department IN ('HR', 'IT')`                  |
+| `NOT IN`          | Exclude multiple values        | `WHERE column NOT IN (value1, value2)`      | `WHERE department NOT IN ('HR', 'IT')`              |
+| `AND`             | Combine conditions (both true) | `WHERE cond1 AND cond2`                     | `WHERE salary > 50000 AND department = 'IT'`        |
+| `OR`              | Either condition true          | `WHERE cond1 OR cond2`                      | `WHERE department = 'HR' OR department = 'Finance'` |
+| `NOT`             | Reverse condition              | `WHERE NOT condition`                       | `WHERE NOT department = 'HR'`                       |
+| `IS NULL`         | Check null values              | `WHERE column IS NULL`                      | `WHERE bonus IS NULL`                               |
+| `IS NOT NULL`     | Not null values                | `WHERE column IS NOT NULL`                  | `WHERE bonus IS NOT NULL`                           |
+
+📌 Combined Examples
+1️⃣ Select distinct departments with salary filter
+SELECT DISTINCT department
+FROM employees
+WHERE salary > 50000;
+
+2️⃣ Count employees in IT or HR
+SELECT COUNT(*)
+FROM employees
+WHERE department IN ('IT', 'HR');
+
+3️⃣ Employees with salary between range
+SELECT name, salary
+FROM employees
+WHERE salary BETWEEN 40000 AND 60000;
+
+4️⃣ Names starting with "J"
+SELECT name
+FROM employees
+WHERE name LIKE 'J%';
+
+5️⃣ Multiple conditions
+SELECT *
+FROM employees
+WHERE department = 'IT'
+AND salary >= 60000
+AND hire_date BETWEEN '2022-01-01' AND '2023-01-01';
+
+***********************************************************************************************************************************************************************************************************************************
