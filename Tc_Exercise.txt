@@ -604,3 +604,118 @@ Users can download or delete uploaded files
 
 
 *********************************************************************
+Exercise 14: Design complete test cases for 'Admin Dashboard Filters' considering functional, negative, boundary, security, integration, and performance aspects. Guidance: - Identify inputs and rules - Apply boundary conditions - Consider failure scenarios - Think about integration impact - Include regression areas - Consider automation readiness with sample business reuqirents
+
+Sample Business Requirement
+
+The Admin Dashboard allows administrators to filter user or transaction data with the following features:
+
+Filters available: Date Range, Status (Active/Inactive/Suspended), Role (Admin/User/Manager), Department, Transaction Amount Range.
+
+Multiple filters can be applied simultaneously.
+
+Results are displayed in a paginated table with sorting options.
+
+Dashboard should handle thousands of records efficiently.
+
+Only authorized admins can access the dashboard.
+
+Export functionality available for filtered results.
+
+| Test Scenario ID | Test Scenario                     | Type              | Input / Condition           | Expected Outcome                        | Automation Feasible |
+| ---------------- | --------------------------------- | ----------------- | --------------------------- | --------------------------------------- | ------------------- |
+| TS01             | Apply single filter               | Functional        | Status = Active             | Table shows only active users           | Yes                 |
+| TS02             | Apply multiple filters            | Functional        | Status=Active, Role=User    | Table shows users matching all filters  | Yes                 |
+| TS03             | Clear filters                     | Functional        | Any filters applied         | All filters reset, full table displayed | Yes                 |
+| TS04             | Sort filtered results             | Functional        | Sort by name after filter   | Sorted list within filtered results     | Yes                 |
+| TS05             | Export filtered results           | Functional        | Any filter applied          | CSV/Excel export matches filtered table | Yes                 |
+| TS06             | Pagination after filtering        | Functional        | Large result set            | Pagination works, correct data per page | Yes                 |
+| TS07             | Invalid date range                | Negative          | End date < Start date       | Error: “Invalid date range”             | Yes                 |
+| TS08             | Invalid role selection            | Negative          | Role not in dropdown        | Error: “Invalid role selected”          | Yes                 |
+| TS09             | Empty filter input                | Negative          | Blank department            | All records shown or error              | Yes                 |
+| TS10             | Special characters in text filter | Negative          | Department = `!@#$%`        | Input sanitized, no crash               | Yes                 |
+| TS11             | Unauthorized access               | Negative/Security | Non-admin user              | Access denied / redirect                | Partial             |
+| TS12             | Earliest possible date            | Boundary          | Start date = 01/01/2000     | Filter works correctly                  | Yes                 |
+| TS13             | Latest possible date              | Boundary          | End date = today            | Filter works correctly                  | Yes                 |
+| TS14             | Transaction amount min/max        | Boundary          | Min=0, Max=1,000,000        | Correct filtered results                | Yes                 |
+| TS15             | Empty text field                  | Boundary          | Department = 0 chars        | Shows all records                       | Yes                 |
+| TS16             | Maximum text length               | Boundary          | Department = 50 chars       | Accepts and filters correctly           | Yes                 |
+| TS17             | SQL injection in filters          | Security          | `' OR 1=1 --`               | Input sanitized, no data leak           | Partial             |
+| TS18             | XSS in text fields                | Security          | `<script>alert(1)</script>` | Script not executed                     | Partial             |
+| TS19             | Role-based filter access          | Security          | Admin-only filter           | Non-admin cannot access                 | Partial             |
+| TS20             | Sensitive data in export          | Security          | Filter applied              | Only permitted columns exported         | Partial             |
+| TS21             | Filter triggers DB query          | Integration       | Apply any filter            | Only relevant rows fetched              | Yes                 |
+| TS22             | Filter + Export                   | Integration       | Any filter                  | Export matches DB data                  | Yes                 |
+| TS23             | Dashboard + Auth                  | Integration       | Admin login                 | Access allowed, filters functional      | Yes                 |
+| TS24             | Filter + Notification             | Integration       | Status=Suspended            | Notification triggered (if configured)  | Partial             |
+| TS25             | Filter + Pagination               | Integration       | Large dataset               | Pagination correct, no mismatch         | Yes                 |
+| TS26             | Filter large dataset              | Performance       | 10,000+ records             | Response within SLA                     | Partial             |
+| TS27             | Multiple filters performance      | Performance       | 3–5 filters combined        | Fast response, no crash                 | Partial             |
+| TS28             | Concurrent filtering              | Performance       | 50 admins filtering         | System handles load                     | Partial             |
+| TS29             | Export performance                | Performance       | Filtered 10,000 records     | Export completes in reasonable time     | Partial             |
+| TS30             | Pagination with filters           | Performance       | 1,000+ results              | Pagination accurate and fast            | Partial             |
+
+**************************************************************************************************
+Exercise 15: Design complete test cases for 'Role-Based Access Control' considering functional,
+negative, boundary, security, integration, and performance aspects.
+Guidance: - Identify inputs and rules - Apply boundary conditions - Consider failure scenarios -
+Think about integration impact - Include regression areas - Consider automation readiness
+
+Sample Business Requirement
+
+The system implements Role-Based Access Control for users:
+
+Roles: Admin, Manager, User, Guest
+
+Permissions:
+
+Admin: Full access (create, read, update, delete users, settings, data)
+
+Manager: Limited administrative access (view reports, manage assigned teams)
+
+User: Access own data, limited operations
+
+Guest: Read-only public content
+
+Users can have multiple roles.
+
+Access control applies across all modules: Dashboard, Reports, File Uploads, Settings.
+
+Unauthorized actions must be blocked and logged.
+
+| Test Scenario ID | Test Scenario                    | Type        | Input / Condition                | Expected Outcome                              | Automation Feasible |
+| ---------------- | -------------------------------- | ----------- | -------------------------------- | --------------------------------------------- | ------------------- |
+| TS01             | Admin full access                | Functional  | Login as Admin                   | Access to all modules & features              | Yes                 |
+| TS02             | Manager limited access           | Functional  | Login as Manager                 | Access allowed modules, restricted blocked    | Yes                 |
+| TS03             | User access                      | Functional  | Login as User                    | Only own data accessible                      | Yes                 |
+| TS04             | Guest access                     | Functional  | Login as Guest                   | Only public pages accessible                  | Yes                 |
+| TS05             | Multiple roles                   | Functional  | User has Admin + Manager         | Combined permissions applied correctly        | Yes                 |
+| TS06             | Role change                      | Functional  | User role updated                | Access updated immediately                    | Yes                 |
+| TS07             | Unauthorized action attempt      | Negative    | User tries restricted action     | Action blocked, logged                        | Yes                 |
+| TS08             | User attempts admin page         | Negative    | User role                        | Access denied, error displayed                | Yes                 |
+| TS09             | Guest attempts write operation   | Negative    | Guest role                       | Action blocked, read-only enforced            | Yes                 |
+| TS10             | Invalid role assignment          | Negative    | Assign non-existent role         | Error: Role not recognized                    | Yes                 |
+| TS11             | Remove all roles                 | Negative    | User has 0 roles                 | No access to restricted modules               | Yes                 |
+| TS12             | Login with expired credentials   | Negative    | Any role                         | Access denied, proper message                 | Yes                 |
+| TS13             | Maximum roles per user           | Boundary    | Assign 5+ roles                  | System handles limit or warning               | Yes                 |
+| TS14             | No roles assigned                | Boundary    | User created with 0 roles        | Access denied                                 | Yes                 |
+| TS15             | Maximum permission set           | Boundary    | Role with 50+ permissions        | Access applied correctly                      | Yes                 |
+| TS16             | Role with no permissions         | Boundary    | Role exists but no access        | Access denied, proper message                 | Yes                 |
+| TS17             | URL tampering                    | Security    | Restricted URL manually accessed | Access denied, redirected                     | Partial             |
+| TS18             | API access bypass                | Security    | Restricted API call              | 403 Forbidden                                 | Partial             |
+| TS19             | Session hijacking                | Security    | Stolen token attempt             | Access denied, token invalidated              | Partial             |
+| TS20             | SQL injection in role management | Security    | `' OR 1=1 --`                    | Input sanitized, no escalation                | Partial             |
+| TS21             | XSS in roles                     | Security    | `<script>` input                 | Input sanitized, no execution                 | Partial             |
+| TS22             | Log unauthorized attempts        | Security    | Blocked action                   | Audit log updated with user, role, timestamp  | Partial             |
+| TS23             | Role assigned triggers DB update | Integration | Assign role                      | DB updated correctly                          | Yes                 |
+| TS24             | Module access check              | Integration | Login with role                  | Only permitted actions visible                | Yes                 |
+| TS25             | Role change propagation          | Integration | Update role                      | Access updated across dashboard, API, reports | Yes                 |
+| TS26             | Audit log integration            | Integration | Unauthorized attempt             | Log recorded in central system                | Partial             |
+| TS27             | Authentication + RBAC            | Integration | Login via SSO                    | Roles applied correctly on login              | Yes                 |
+| TS28             | Large number of users            | Performance | 10,000+ users                    | Access evaluation performant                  | Partial             |
+| TS29             | Many roles per user              | Performance | Users with 10+ roles             | Access evaluation fast                        | Partial             |
+| TS30             | Concurrent logins                | Performance | 100+ users                       | System handles load, access correct           | Partial             |
+| TS31             | Bulk role assignment             | Performance | Assign role to 500 users         | System updates efficiently                    | Partial             |
+| TS32             | Audit logging under load         | Performance | Multiple unauthorized attempts   | Logs captured without degradation             | Partial             |
+
+**********************************************************************************************************
