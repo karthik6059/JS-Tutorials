@@ -1501,6 +1501,225 @@ With bind → function always remembers its object and preset arguments
 
 <img width="727" height="560" alt="image" src="https://github.com/user-attachments/assets/a0aaf312-7140-43d1-a763-c1af380a070d" />
 
+**using this in fucntion()  vs ()=>{}**
+
+**Simple Final Rule**
+
+If you need:
+this
+bind
+call
+apply
+dynamic object context
+👉 DO NOT use arrow functions.
+Use normal functions.
+
+Core Rule (Most Important)
+
+this depends on HOW a function is called, NOT where it is written.
+
+✅ 1️⃣ Global Context
+console.log(this);
+
+
+Browser → window
+
+Even in strict mode
+
+👉 Avoid relying on this here.
+
+✅ 2️⃣ Normal Function (Standalone Call)
+function test() {
+  console.log(this);
+}
+
+test();
+
+
+Non-strict → window
+
+Strict → undefined
+
+👉 Don’t rely on this in standalone functions.
+
+✅ 3️⃣ Object Method (Regular Function)
+const person = {
+  name: "Max",
+  greet() {
+    console.log(this.name);
+  }
+};
+
+person.greet(); // "Max"
+
+
+✔ this = object before the dot
+✔ This is the most common and safe usage
+
+❌ 4️⃣ Object Method (Arrow Function)
+const person = {
+  name: "Max",
+  greet: () => {
+    console.log(this.name);
+  }
+};
+
+person.greet(); // undefined
+
+
+🚨 Arrow functions do NOT have their own this
+They inherit from outer scope.
+
+👉 Do NOT use arrow functions as object methods if you need this.
+
+✅ 5️⃣ Extracting a Method (Loses this)
+const greet = person.greet;
+greet(); // undefined
+
+
+When extracted:
+
+Function is no longer called as person.greet()
+
+this is lost
+
+✅ 6️⃣ Fixing with .bind()
+const greet = person.greet.bind(person);
+greet(); // "Max"
+
+
+✔ bind() permanently sets this
+
+✅ 7️⃣ bind() with Arguments (Partial Application)
+function multiply(a, b) {
+  return a * b;
+}
+
+const double = multiply.bind(null, 2);
+double(5); // 10
+
+
+First argument fixed to 2
+
+this irrelevant because function doesn’t use it
+
+❌ 8️⃣ Arrow Functions + bind()
+const obj = {
+  x: 10,
+  getX: () => this.x
+};
+
+const fn = obj.getX.bind(obj);
+fn(); // ❌ still wrong
+
+
+🚨 bind() does NOT work on arrow functions
+Arrow functions ignore this binding.
+
+✅ 9️⃣ Event Listeners
+Regular function:
+button.addEventListener("click", function() {
+  console.log(this); // button
+});
+
+
+✔ this = element
+
+Arrow function:
+button.addEventListener("click", () => {
+  console.log(this); // outer scope
+});
+
+
+❌ Not the button
+| Situation                | What is `this`?     | What to Use          |
+| ------------------------ | ------------------- | -------------------- |
+| Object method            | The object          | Regular function     |
+| Extracted method         | Lost / undefined    | Use `.bind()`        |
+| Arrow function           | Outer scope         | Avoid for methods    |
+| Event listener (regular) | The element         | Regular function     |
+| Standalone function      | window / undefined  | Avoid using `this`   |
+| `bind(obj)`              | Forces `this = obj` | When passing methods |
+
+🚀 One-Line Memory Trick
+
+Regular function → this depends on WHO calls it
+Arrow function → this depends on WHERE it was created
+
+**What “outer scope” actually means**
+Arrow functions do not create their own this.
+Instead, they inherit this from where they are defined, not where they are called.
+This is called:
+Lexical this (fixed at creation time)
+
+✅ Example 1: Arrow in Global Scope
+const test = () => {
+  console.log(this);
+};
+
+test();
+
+
+In browser:
+
+this = window
+
+Because arrow takes this from outer global scope
+
+✅ Example 2: Arrow Inside a Method
+const person = {
+  name: "Max",
+  greet() {
+    const inner = () => {
+      console.log(this.name);
+    };
+    inner();
+  }
+};
+
+person.greet(); // "Max"
+
+
+Why does this work?
+
+greet() is a normal method → this = person
+
+Arrow function inside it inherits that this
+
+So inner() still sees this = person
+
+✔ This is a GOOD use of arrow functions.
+
+❌ Example 3: Arrow as Object Method
+const person = {
+  name: "Max",
+  greet: () => {
+    console.log(this.name);
+  }
+};
+
+person.greet(); // undefined
+
+
+Why?
+
+Arrow function takes this from outer scope (global)
+
+NOT from person
+
+So this !== person
 
 *****************************************************************************************************************************
+
+🔥 What Are Getters and Setters?
+
+They are special methods inside objects that let you:
+
+✅ Control how a property is read (getter)
+
+✅ Control how a property is updated (setter)
+
+They look like properties but behave like functions.
+
+<img width="625" height="760" alt="image" src="https://github.com/user-attachments/assets/c5a96b0d-38f5-4894-9c19-8027bf70287a" />
 
