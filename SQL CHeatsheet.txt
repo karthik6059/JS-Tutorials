@@ -57,3 +57,19 @@ AND salary >= 60000
 AND hire_date BETWEEN '2022-01-01' AND '2023-01-01';
 
 ***********************************************************************************************************************************************************************************************************************************
+
+SQL logical query processing order
+
+| Step | Clause                 | What Happens                      | Notes                                          |
+| ---- | ---------------------- | --------------------------------- | ---------------------------------------------- |
+| 1    | `FROM`                 | Tables are identified and joined  | Includes `JOIN` conditions                     |
+| 2    | `WHERE`                | Rows are filtered                 | Cannot use aggregate functions here            |
+| 3    | `GROUP BY`             | Rows are grouped                  | Required before using aggregates (if grouping) |
+| 4    | `HAVING`               | Groups are filtered               | Works on aggregated results                    |
+| 5    | `SELECT`               | Columns are selected              | Expressions are evaluated here                 |
+| 6    | `DISTINCT`             | Duplicate rows removed            | Applied after SELECT                           |
+| 7    | `ORDER BY`             | Result is sorted                  | Final step before output                       |
+| 8    | `LIMIT / TOP / OFFSET` | Restricts number of rows returned | Database-specific syntax                       |
+
+***********************************************************************************************************************************************************************************************************************************
+
