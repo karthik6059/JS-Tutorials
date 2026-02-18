@@ -1373,4 +1373,134 @@ Very useful in React props or function arguments.
 
 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
+**this - keyword **
+
+| **Context / Scope**                      | **How to Access Properties**                                    | **Example**                                                                                                              | **Result / Notes**                                                                     |
+| ---------------------------------------- | --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
+| **Inside object method**                 | Use `this.property`                                             | `javascript const person = { name: "Alice", greet() { console.log(this.name); } }; person.greet(); // "Alice" `          | `this` refers to the object, allows dynamic access without hardcoding                  |
+
+| **Outside object, different block**      | Use `object.property`                                           | `javascript const person = { name: "Alice" }; { console.log(person.name); } // "Alice" `                                 | You **cannot** access property directly as a variable; must reference the object       |
+
+| **Inside object, arrow function method** | `this` inherits outer scope                                     | `javascript const person = { name: "Alice", greet: () => console.log(this.name) }; person.greet(); // undefined `        | Arrow functions **don’t bind their own `this`**, usually not useful for object methods |
+
+| **Inside constructor function**          | Use `this.property`                                             | `javascript function Person(name) { this.name = name; } const bob = new Person("Bob"); console.log(bob.name); // "Bob" ` | `this` points to the new object being created; without `this`, property won’t attach   |
+
+| **Regular function outside object**      | `this` refers to global object                                  | `javascript function show() { console.log(this); } show(); // window (browser) `                                         | Not usually used to access object properties                                           |
+
+| **Block scope variable**                 | Cannot access object property directly without object reference | `javascript const person = { name: "Alice" }; { console.log(name); } // ReferenceError `                                 | Object properties are **not block-scoped variables**, must use `object.property`       |
+
+2️⃣ JavaScript: Object properties are not automatically in scope
+const person = {
+  name: "Alice",
+  greet: function() {
+    console.log(name); // ❌ ReferenceError
+  }
+};
+
+**Why this fails in JS:**
+name is a property of the object, not a variable in the function scope.
+Methods in JS don’t automatically get object properties as local variables.
+To access object properties, you must reference the object:
+Inside a method: this.name
+Outside the object: person.name
+
+Memory difference:
+JS separates stack (function scope) and heap (object properties) strictly.
+Fields aren’t magically copied into function scope like Java.
+
+3️⃣ Optional: When this is optional in JS
+
+In JS, this can sometimes be skipped if you destructure or assign the property to a local variable:
+const person = {
+  name: "Alice",
+  greet: function() {
+    const { name } = this; // now name is a local variable
+    console.log(name);      // ✅ "Alice"
+  }
+};
+
+This is manual in JS.
+Java does it automatically for class fields.
+
+**USAGE OF BIND IN this**
+1️⃣ Why bind is needed
+
+In JavaScript:
+
+const { getFormattedTitle } = movie;
+getFormattedTitle(); // ❌ Error: Cannot read properties of undefined (reading 'title')
+
+
+When you extract a method from an object, it loses its implicit this binding.
+
+Inside the function, this no longer points to the object (movie) — it becomes undefined in strict mode.
+
+✅ Solution: bind() sets the value of this permanently for that function:
+
+getFormattedTitle = getFormattedTitle.bind(movie);
+getFormattedTitle(); // ✅ Works
+
+
+Now, no matter how you call the function, this always points to movie.
+
+2️⃣ How bind works
+const person = {
+  name: "Alice",
+  greet: function() {
+    console.log("Hello, " + this.name);
+  }
+};
+
+const greet = person.greet;
+greet(); // ❌ undefined or "Hello, undefined"
+
+const boundGreet = person.greet.bind(person);
+boundGreet(); // ✅ "Hello, Alice"
+
+
+.bind(object) returns a new function with this permanently set to object.
+
+3️⃣ Quick comparison table
+| Method          | `this` inside function | Example                                                             |
+| --------------- | ---------------------- | ------------------------------------------------------------------- |
+| Direct call     | Refers to object       | `person.greet()` → "Hello, Alice"                                   |
+| Detached method | Loses object reference | `const greet = person.greet; greet()` → "Hello, undefined"          |
+| Bound method    | `this` fixed to object | `const greet = person.greet.bind(person); greet()` → "Hello, Alice" |
+
+4️⃣ Key takeaway
+
+bind is used to fix this so a function still works even if called detached from the object.
+Useful in callbacks, destructuring, event handlers, or passing methods around.
+
+
+| **Scenario**                             | **Function uses `this`?** | **Bind value (`thisArg`)**              | **Example**                                                                                                                                 | **Result / Notes**                                                 |
+| ---------------------------------------- | ------------------------- | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| Function **does not use `this`**         | ❌ No                      | Any value (`this`, `null`, `undefined`) | `javascript function multiply(a,b){ return a*b; } const double = multiply.bind(null,2); console.log(double(5)); // 10 `                     | Works fine because `this` is ignored; only preset arguments matter |
+
+| Function **uses `this`**                 | ✅ Yes                     | Must be the correct object              | `javascript const obj = { x: 10, multiply(b){ return this.x*b; } }; const double = obj.multiply.bind(obj,2); console.log(double()); // 20 ` | `this` must point to the object to access its properties           |
+
+| Function **uses `this`, but wrong bind** | ✅ Yes                     | Wrong object / null                     | `javascript const wrong = obj.multiply.bind(null,2); console.log(wrong()); // NaN `                                                         | `this` is incorrect, so property access fails                      |
+
+| Function **no preset args**              | Any                       | Any                                     | `javascript const double = multiply.bind(null); console.log(double(5,6)); // 30 `                                                           | Only affects `this`; arguments are passed normally                 |
+
+
+✅ Key takeaways
+
+.bind(thisArg, arg1, arg2…):
+
+Fixes this inside the function.
+Optionally pre-fills arguments for partial application.
+If the function doesn’t use this, the thisArg doesn’t matter.
+If the function does use this, the correct object must be bound, or it will fail.
+You can mix this binding and argument pre-filling for convenience in callbacks, event handlers, and timers.
+
+What is Bind?
+Think of bind as “gluing a function to an object” so it always knows who it belongs to (this) and optionally what arguments it should start with.
+Without bind → function can “forget” its object (this becomes wrong)
+With bind → function always remembers its object and preset arguments
+
+<img width="727" height="560" alt="image" src="https://github.com/user-attachments/assets/a0aaf312-7140-43d1-a763-c1af380a070d" />
+
+
+*****************************************************************************************************************************
 
