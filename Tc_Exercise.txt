@@ -719,3 +719,182 @@ Unauthorized actions must be blocked and logged.
 | TS32             | Audit logging under load         | Performance | Multiple unauthorized attempts   | Logs captured without degradation             | Partial             |
 
 **********************************************************************************************************
+Exercise 18: Design complete test cases for 'Pagination System' considering functional, negative, boundary, security, integration, and performance aspects. Guidance: - Identify inputs and rules - Apply boundary conditions - Consider failure scenarios - Think about integration impact - Include regression areas - Consider automation readiness
+
+Sample Business Requirements
+
+The system displays a list of items with pagination controls.
+Users can navigate using: Next, Previous, First, Last, and direct page number input.
+Default page size is 10 items per page, configurable up to 100 items.
+Total items can vary; pagination must handle zero items gracefully.
+The system must prevent invalid page requests (negative, exceeding total pages).
+Pagination integrates with search and filtering features.
+Performance must support up to 10,000 items with response time < 2 seconds.
+Pagination data is stored and retrieved from a database securely.
+
+| **Category** | **Test Scenario**                | **Description / Steps**      | **Expected Result**                      |
+| ------------ | -------------------------------- | ---------------------------- | ---------------------------------------- |
+| Functional   | Next page navigation             | Click 'Next' button          | Page increments, correct items displayed |
+| Functional   | Previous page navigation         | Click 'Previous' button      | Page decrements, correct items displayed |
+| Functional   | First page navigation            | Click 'First' button         | Page 1 loads                             |
+| Functional   | Last page navigation             | Click 'Last' button          | Last page loads                          |
+| Functional   | Direct page input                | Enter valid page number      | Corresponding page loads                 |
+| Functional   | Page size change                 | Set page size (e.g., 20)     | Correct number of items displayed        |
+| Functional   | Zero items                       | Search returns 0 items       | "No items found" displayed               |
+| Functional   | Pagination with filtering        | Apply filter and paginate    | Only filtered items displayed            |
+| Functional   | Items count update               | Add/remove items dynamically | Pagination updates accordingly           |
+| Negative     | Invalid page number              | Enter -1                     | Error / no page change                   |
+| Negative     | Exceeding total pages            | Enter page > total pages     | Redirect to last page / error            |
+| Negative     | Non-numeric input                | Enter 'abc'                  | Error displayed                          |
+| Negative     | Page size zero                   | Set page size to 0           | Error / revert to default                |
+| Negative     | Page size too large              | Set page size > max (100)    | Error / revert to max                    |
+| Negative     | Click 'Next' on last page        | Attempt navigation           | No change, proper warning                |
+| Boundary     | First page boundary              | Navigate to page 1           | 'Previous' disabled                      |
+| Boundary     | Last page boundary               | Navigate to last page        | 'Next' disabled                          |
+| Boundary     | Minimum page size                | Set page size 1              | Only 1 item displayed                    |
+| Boundary     | Maximum page size                | Set page size 100            | Up to 100 items displayed                |
+| Boundary     | Single item scenario             | 1 item total                 | Pagination controls hidden / disabled    |
+| Boundary     | Total items just above page size | 11 items with page size 10   | 2 pages displayed                        |
+| Security     | SQL Injection                    | Enter `' OR '1'='1`          | Input sanitized, DB secure               |
+| Security     | XSS                              | Enter `<script>`             | Input sanitized, no script execution     |
+| Security     | Unauthorized access              | Navigate without login       | Access denied / redirect to login        |
+| Security     | URL tampering                    | Access `?page=-5`            | Redirect to valid page, no crash         |
+| Integration  | Pagination with search           | Search and navigate pages    | Only filtered items displayed            |
+| Integration  | Pagination with sorting          | Sort and navigate            | Sorted items displayed correctly         |
+| Integration  | Pagination via API               | Fetch page via API           | Correct items & metadata returned        |
+| Integration  | DB update during pagination      | Delete item while on page    | Pagination updates dynamically           |
+| Performance  | Load test                        | 10,000 items, paginate       | Response < 2s per page                   |
+| Performance  | Stress test                      | 100 concurrent users         | System stable, no data loss              |
+| Performance  | Large page size                  | Page size 100, 1,000 items   | Page loads in acceptable time            |
+| Performance  | Continuous navigation            | Rapid 'Next' clicks          | System stable, no crash                  |
+
+*************************************************************************************************************************************************************
+
+Exercise 19: Design complete test cases for 'Notification System' considering functional, negative, boundary, security, integration, and performance aspects. Guidance: - Identify inputs and rules - Apply boundary conditions - Consider failure scenarios - Think about integration impact - Include regression areas - Consider automation readiness
+
+Sample Business Requirements for Notification System
+	Users receive notifications for events (messages, system alerts, updates).
+	Notifications can be email, SMS, push, or in-app.
+	Notifications can have priority levels (High, Medium, Low).
+	Users can mark notifications as read/unread or delete them.
+	Notifications must be delivered within 30 seconds.
+	System must handle bulk notifications (1000+ users) efficiently.
+	Users can configure notification preferences (enable/disable channels).
+	Notifications integrate with other modules: messaging, alerts, tasks, and logs.
+	System must handle invalid data gracefully (missing recipient, invalid format).
+
+
+| **Category**    | **Test Scenario**               | **Description / Steps**                         | **Expected Result**                         |
+| --------------- | ------------------------------- | ----------------------------------------------- | ------------------------------------------- |
+| Functional      | Create notification             | Trigger notification for a user                 | Notification appears in user inbox/app      |
+| Functional      | Delivery via email              | Trigger email notification                      | Email received within SLA                   |
+| Functional      | Delivery via SMS                | Trigger SMS notification                        | SMS received correctly                      |
+| Functional      | Delivery via push               | Trigger push notification                       | Push received on device                     |
+| Functional      | Mark as read                    | User clicks 'Mark as Read'                      | Notification status updated to read         |
+| Functional      | Mark as unread                  | User marks notification unread                  | Status updated to unread                    |
+| Functional      | Delete notification             | User deletes notification                       | Notification removed                        |
+| Functional      | Notification with priority      | Create High, Medium, Low priority               | Correct priority labeling                   |
+| Functional      | Notification preferences        | Disable/enable channels                         | Notifications respect user preferences      |
+| Functional      | Bulk notifications              | Send to 1000+ users                             | All users receive notifications             |
+| Negative        | Missing recipient               | Trigger notification without recipient          | Error logged, notification not sent         |
+| Negative        | Invalid email format            | Enter invalid email                             | Notification not sent, error logged         |
+| Negative        | Invalid phone number            | Enter invalid phone                             | SMS not sent, error logged                  |
+| Negative        | Exceeding message length        | Content too long                                | Error / truncated content                   |
+| Negative        | Invalid notification type       | Unsupported channel                             | Error logged, notification not sent         |
+| Negative        | Duplicate notification creation | Send same notification twice via backend        | System handles duplicates appropriately     |
+| Negative / Edge | Click same notification twice   | User clicks notification twice                  | Notification not sent again; status updates |
+| Boundary        | Empty notification content      | Send empty content                              | Error / rejected                            |
+| Boundary        | Maximum content length          | Send max allowed content                        | Notification sent successfully              |
+| Boundary        | Minimum recipients              | Send to 1 recipient                             | Delivered successfully                      |
+| Boundary        | Maximum recipients              | Send to 10,000 recipients                       | Delivered to all                            |
+| Boundary        | Rapid notifications             | Trigger multiple notifications quickly          | System handles all without crash            |
+| Boundary        | Priority boundaries             | Assign highest/lowest priority                  | Displayed correctly in order                |
+| Security        | SQL Injection                   | Enter `' OR '1'='1` in content                  | Input sanitized, DB secure                  |
+| Security        | XSS                             | Include `<script>`                              | Script not executed                         |
+| Security        | Unauthorized trigger            | User triggers notification without permission   | Access denied, error logged                 |
+| Security        | Data privacy                    | Notification visibility                         | Only recipient can view                     |
+| Security        | URL tampering                   | Access invalid notification URL                 | Access denied / redirect                    |
+| Integration     | Messaging system                | Message triggers notification                   | Notification received correctly             |
+| Integration     | Task system                     | Task assignment triggers notification           | Notification delivered                      |
+| Integration     | Alert system                    | System alert triggers notification              | Delivered to all configured channels        |
+| Integration     | Logging system                  | Notification activity logged                    | Audit trail updated                         |
+| Integration     | Notification preferences        | Change user preferences                         | Notifications respect updated settings      |
+| Performance     | Bulk notifications              | Send 1000+ notifications                        | Delivered within SLA (<30s)                 |
+| Performance     | High concurrency                | 100+ users trigger notifications simultaneously | System stable, no data loss                 |
+| Performance     | Large content                   | Send max content notification                   | Delivered successfully                      |
+| Performance     | Continuous notifications        | Send 500 notifications in 1 min                 | No system crash, stable memory usage        |
+| Performance     | Multi-channel                   | Email + SMS + push for 500 users                | All channels deliver correctly and timely   |
+
+✅ Edge Cases Covered:
+
+Zero recipients, single recipient, max recipients
+Empty content, max content
+Invalid inputs (email, phone, type)
+Duplicate notification creation
+Click same notification twice
+Bulk rapid notifications
+Multi-channel delivery
+
+**************************************************************************************************************************************************************************
+Exercise 20: Design complete test cases for 'Session Management' considering functional,
+negative, boundary, security, integration, and performance aspects.
+Guidance: - Identify inputs and rules - Apply boundary conditions - Consider failure scenarios -
+Think about integration impact - Include regression areas - Consider automation readiness
+
+
+Sample Business Requirements for Session Management
+
+Users must log in to access protected areas.
+A session is created upon successful login and expires after a configurable timeout (e.g., 15 minutes of inactivity).
+Users can log out manually, which terminates the session immediately.
+Only one active session per user is allowed unless concurrent sessions are supported.
+Sessions should use secure tokens (e.g., JWT or session ID).
+Session tokens must be invalidated after logout, timeout, or password change.
+Session data may include user roles, preferences, and authentication state.
+Session management integrates with authentication, authorization, and auditing systems.
+System must prevent session fixation, hijacking, or replay attacks.
+Performance requirement: system must support 10,000 concurrent sessions.
+
+| **Category** | **Test Scenario**                      | **Description / Steps**                      | **Expected Result**                                |
+| ------------ | -------------------------------------- | -------------------------------------------- | -------------------------------------------------- |
+| Functional   | Login creates session                  | Login with valid credentials                 | Session created, token issued                      |
+| Functional   | Logout terminates session              | Click logout                                 | Session invalidated, token cannot be reused        |
+| Functional   | Session timeout                        | Remain inactive beyond timeout               | Session expires automatically                      |
+| Functional   | Session refresh on activity            | Perform activity before timeout              | Session extends, user remains logged in            |
+| Functional   | Single active session                  | Login from new device                        | Previous session terminated if single session only |
+| Functional   | Multiple concurrent sessions           | Login from multiple devices (if allowed)     | Multiple sessions active, all valid                |
+| Functional   | Session data storage                   | Check session info                           | Roles, preferences, auth state stored correctly    |
+| Functional   | Session retrieval                      | Access protected resource with valid session | Access granted                                     |
+| Functional   | Session invalid after password change  | Change password while logged in              | Existing session invalidated                       |
+| Functional   | Session token renewal                  | Use refresh token                            | New session token issued                           |
+| Negative     | Invalid login credentials              | Enter wrong username/password                | Session not created, error shown                   |
+| Negative     | Access with expired session            | Access after timeout                         | Access denied, redirect to login                   |
+| Negative     | Access after logout                    | Use token after logout                       | Access denied                                      |
+| Negative     | Tampered token                         | Modify session token                         | Access denied, token invalidated                   |
+| Negative     | Access without session                 | Direct access to protected page              | Access denied                                      |
+| Negative     | Multiple logout attempts               | Click logout repeatedly                      | Handled gracefully, no errors                      |
+| Negative     | Concurrent session conflict            | Login from new device                        | Old session invalidated                            |
+| Boundary     | Session timeout minimum                | Set session timeout to 1 min                 | Session expires after 1 min                        |
+| Boundary     | Session timeout maximum                | Set timeout to 24 hours                      | Session valid for 24 hours                         |
+| Boundary     | Max concurrent sessions                | Attempt 10,000 sessions                      | System handles without crash                       |
+| Boundary     | Minimum session token length           | Generate shortest token                      | Token valid and secure                             |
+| Boundary     | Maximum session token length           | Generate longest token                       | Token valid, no errors                             |
+| Boundary     | Edge of inactivity                     | Activity just before timeout                 | Session extended correctly                         |
+| Security     | Session fixation                       | Set session ID manually                      | Session rejected, new token generated              |
+| Security     | Session hijacking                      | Use stolen token                             | Access denied, token invalidated                   |
+| Security     | XSS in session data                    | Inject script                                | Input sanitized, session secure                    |
+| Security     | Token replay                           | Reuse old token                              | Access denied                                      |
+| Security     | Secure cookie flags                    | Check session cookie                         | HttpOnly, Secure, SameSite set                     |
+| Security     | Session invalidation on password reset | Reset password                               | Previous session invalidated                       |
+| Integration  | Authentication system                  | Login triggers session                       | Session created, access granted                    |
+| Integration  | Authorization system                   | Access role-based page                       | Session contains role, access granted/denied       |
+| Integration  | Auditing system                        | Record session activity                      | Login, logout, timeout logged                      |
+| Integration  | Notification system                    | Trigger alerts for login/logout              | Notifications sent correctly                       |
+| Integration  | API access                             | Use session token for API calls              | Token validated, API responds correctly            |
+| Performance  | Concurrent logins                      | 10,000 users login simultaneously            | System stable, all sessions valid                  |
+| Performance  | Session validation under load          | 5,000 concurrent requests                    | Response time < 2 sec                              |
+| Performance  | Session token generation               | Generate 10,000 tokens                       | Tokens issued correctly                            |
+| Performance  | Session expiry processing              | Expire thousands of sessions                 | Cleanup handled efficiently                        |
+| Performance  | Rapid login/logout                     | Users log in/out rapidly                     | System stable, no memory leaks                     |
+
+*****************************************************************************************************************
