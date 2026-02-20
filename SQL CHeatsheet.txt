@@ -71,5 +71,28 @@ SQL logical query processing order
 | 7    | `ORDER BY`             | Result is sorted                  | Final step before output                       |
 | 8    | `LIMIT / TOP / OFFSET` | Restricts number of rows returned | Database-specific syntax                       |
 
-***********************************************************************************************************************************************************************************************************************************
+*********************************************************************************************************************************************************************************************
+
+| Operation                                                     | Purpose                             | Basic Syntax                                               | Example                                                | Notes                                              |
+| ------------------------------------------------------------- | ----------------------------------- | ---------------------------------------------------------- | ------------------------------------------------------ | -------------------------------------------------- |
+| **INSERT**                                                    | Add new rows to a table             | `INSERT INTO table_name (col1, col2) VALUES (val1, val2);` | `INSERT INTO employees (id, name) VALUES (1, 'John');` | Column list optional if inserting into all columns |
+
+| **INSERT INTO ... SELECT**                                    | Insert data from another table      | `INSERT INTO table1 (col1) SELECT col1 FROM table2;`       | `INSERT INTO archive_emp SELECT * FROM employees;`     | Useful for copying filtered data                   |
+
+| **NULL**                                                      | Represents missing or unknown value | `IS NULL` / `IS NOT NULL`                                  | `SELECT * FROM employees WHERE manager_id IS NULL;`    | Use `IS NULL`, not `= NULL`                        |
+
+| **UPDATE**                                                    | Modify existing records             | `UPDATE table_name SET col1 = value WHERE condition;`      | `UPDATE employees SET salary = 60000 WHERE id = 1;`    | Always use `WHERE` to avoid updating all rows      |
+
+| **DELETE**                                                    | Remove records from table           | `DELETE FROM table_name WHERE condition;`                  | `DELETE FROM employees WHERE id = 1;`                  | Without `WHERE`, deletes all rows                  |
+
+| **SELECT**                                                    | Retrieve data from table            | `SELECT col1, col2 FROM table_name;`                       | `SELECT name, salary FROM employees;`                  | Use `*` to select all columns                      |
+
+| **SELECT TOP** (SQL Server)                                   | Limit number of rows returned       | `SELECT TOP n * FROM table_name;`                          | `SELECT TOP 5 * FROM employees;`                       | Used in SQL Server                                 |
+
+| **LIMIT** (MySQL/PostgreSQL)                                  | Limit rows returned                 | `SELECT * FROM table_name LIMIT n;`                        | `SELECT * FROM employees LIMIT 5;`                     | MySQL, PostgreSQL                                  |
+
+| **FETCH FIRST / NEXT** (Oracle, PostgreSQL, SQL Server 2012+) | Limit rows (standard SQL)           | `SELECT * FROM table_name FETCH FIRST n ROWS ONLY;`        | `SELECT * FROM employees FETCH FIRST 5 ROWS ONLY;`     | Often used with `ORDER BY`                         |
+
+*********************************************************************************************************************************************************************************************
+
 
