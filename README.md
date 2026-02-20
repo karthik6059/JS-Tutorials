@@ -1722,4 +1722,21 @@ They are special methods inside objects that let you:
 They look like properties but behave like functions.
 
 <img width="625" height="760" alt="image" src="https://github.com/user-attachments/assets/c5a96b0d-38f5-4894-9c19-8027bf70287a" />
+**********************************************************************
+Sumamrise this
+| Situation              | Example Call        | What `this` Refers To                             | Memory Hint       |
+| ---------------------- | ------------------- | ------------------------------------------------- | ----------------- |
+| 🌍 Global              | `console.log(this)` | Global object (`window` in browser)               | Global = window   |
+| 🔹 Object Method       | `obj.say()`         | The object before the dot                         | **Dot = Object**  |
+| ⚙️ Regular Function    | `func()`            | `undefined` (strict mode) / `window` (non-strict) | Alone = undefined |
+| ➡️ Arrow Function      | `() => {}`          | Inherits from parent scope                        | Arrow = Parent    |
+| 🆕 Constructor         | `new Person()`      | Newly created object                              | New = New object  |
+| 🎯 call / apply / bind | `func.call(obj)`    | Whatever you pass                                 | You decide        |
 
+🧠 Memory Rule
+| Function Type    | `bind`/`call`/`apply` work? |
+| ---------------- | --------------------------- |
+| Regular function | ✅ Yes                       |
+| Arrow function   | ❌ No (fixed `this`)         |
+
+**********************************************************************
