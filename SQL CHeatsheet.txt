@@ -94,5 +94,17 @@ SQL logical query processing order
 | **FETCH FIRST / NEXT** (Oracle, PostgreSQL, SQL Server 2012+) | Limit rows (standard SQL)           | `SELECT * FROM table_name FETCH FIRST n ROWS ONLY;`        | `SELECT * FROM employees FETCH FIRST 5 ROWS ONLY;`     | Often used with `ORDER BY`                         |
 
 *********************************************************************************************************************************************************************************************
+| Topic                   | Purpose / Usage                                                 | Syntax Example                                          | Notes / Key Points                                                                 |
+| ----------------------- | --------------------------------------------------------------- | ------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| **Aggregate Functions** | Perform calculations on multiple rows and return a single value | `SELECT SUM(Price), COUNT(*) FROM Products;`            | Common functions: `SUM()`, `AVG()`, `COUNT()`, `MIN()`, `MAX()`                    |
+| **Aliases**             | Give a temporary name to a column or table                      | `SELECT Price AS ProductPrice FROM Products;`           | Temporary; exists only during query execution. Can alias tables: `FROM Products p` |
 
+| **IN**                  | Filter rows where a column matches **any** value in a list      | `SELECT * FROM Products WHERE CategoryID IN (1, 2, 3);` | Equivalent to multiple OR conditions.                                              |
+| **BETWEEN**             | Filter rows within a **range of values**                        | `SELECT * FROM Products WHERE Price BETWEEN 10 AND 50;` | Inclusive. Equivalent to `Price >= 10 AND Price <= 50`. Uses AND, not OR.          |
+
+| **LIKE**                | Filter rows based on **pattern matching**                       | `SELECT * FROM Users WHERE Name LIKE 'A%';`             | Often used with **wildcards**: `%` (any number of chars), `_` (single char)        |
+
+| **Wildcards**           | Characters used in `LIKE` for flexible pattern matching         | `%` = any characters, `_` = single character            | Example: `LIKE 'Jo_n%'` matches `John`, `Joan`, `Jonas`, etc.                      |
+
+*********************************************************************************************************************************************************************************************
 
