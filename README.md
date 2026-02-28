@@ -451,6 +451,8 @@ There also is the getElementsByName() method which really isn't used commonly (h
 
 **Arrays & Iterables**
 
+   Arrays = objects with indexed properties + iterable → can loop with for...of or spread.
+
 **Array-like objects**
 
   Look like arrays: have .length and numeric indices [0], [1], ...
