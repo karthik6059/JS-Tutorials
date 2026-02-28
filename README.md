@@ -1741,6 +1741,9 @@ Sumamrise this
 
 **********************************************************************
 
+<img width="700" height="759" alt="image" src="https://github.com/user-attachments/assets/7af8f4c8-0d33-4b90-98b2-1a9e53e89fa7" />
+
+
 | Topic                              | Description                                                                                                       | Example                                                                                                                                        |
 | ---------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Prototype**                      | Every JS object has an internal property `[[Prototype]]` linking it to another object. It’s used for inheritance. | `let obj = {}; Object.getPrototypeOf(obj);`                                                                                                    |
